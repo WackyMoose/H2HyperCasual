@@ -1149,11 +1149,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4414128387095912561, guid: 70a30651297486442bc43b3423656cc4, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.87
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4414128387095912561, guid: 70a30651297486442bc43b3423656cc4, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -4.8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4414128387095912561, guid: 70a30651297486442bc43b3423656cc4, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1186,6 +1186,26 @@ PrefabInstance:
     - target: {fileID: 4414128387095912561, guid: 70a30651297486442bc43b3423656cc4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414128387095912565, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+      propertyPath: _maxSpeed
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414128387095912565, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+      propertyPath: _driveSpeed
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414128387095912565, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+      propertyPath: _rotateSpeed
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414128387095912567, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+      propertyPath: m_LinearDrag
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4414128387161136909, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 180
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70a30651297486442bc43b3423656cc4, type: 3}

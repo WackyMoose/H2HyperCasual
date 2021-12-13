@@ -24,14 +24,15 @@ namespace TankGame.TankController
         {
             _horizontalInput = Input.GetAxis("Horizontal");
             _verticalInput = Input.GetAxis("Vertical");
-
-
         }
 
         private void FixedUpdate()
         {
-            _rigidBody2D.MovePosition(_rigidBody2D.position * _horizontalInput * _driveSpeed);
-            _rigidBody2D.MoveRotation(_rigidBody2D.rotation + _verticalInput * _rotateSpeed);
+            if (_rigidBody2D.velocity.sqrMagnitude < _maxSpeed)
+            {
+                _rigidBody2D.AddForce(transform.up * _driveSpeed * _verticalInput);
+            }
+            _rigidBody2D.MoveRotation(_rigidBody2D.rotation + -(_horizontalInput * _rotateSpeed));
         }
     }
 }
