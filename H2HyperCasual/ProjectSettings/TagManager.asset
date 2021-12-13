@@ -41,3 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 2335586205
+    locked: 0
+  - name: Objects
+    uniqueID: 651786701
+    locked: 0
+  - name: Tanks
+    uniqueID: 377447093
+    locked: 0
+  - name: Trees
+    uniqueID: 2484183915
+    locked: 0
+  - name: UI
+    uniqueID: 2616964933
+    locked: 0
