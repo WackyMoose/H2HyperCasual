@@ -8,8 +8,7 @@ GO
 
 CREATE TABLE [Users] 
 (
-	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
-	[PlayerId] int NOT NULL,
+	[PlayerId] int NOT NULL PRIMARY KEY,
 	[PlayerName] NVARCHAR(32) NOT NULL,
 	[Password] NVARCHAR(32) NOT NULL
 );
@@ -34,4 +33,15 @@ CREATE TABLE [PlayerMatches]
 	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[PlayerId] int NOT NULL,
 	[MatchId] int NOT NULL,
+);
+
+CREATE TABLE [Logs] (
+
+   [Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+   [Message] nvarchar(max) NULL,
+   [MessageTemplate] nvarchar(max) NULL,
+   [Level] nvarchar(128) NULL,
+   [TimeStamp] datetime NOT NULL,
+   [Exception] nvarchar(max) NULL,
+   [Properties] nvarchar(max) NULL
 );
