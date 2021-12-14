@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 namespace TankGame.TankController
 {
-    public class TankMovement : MonoBehaviour
+    public class TankMovement : NetworkBehaviour
     {
         [SerializeField] private float _driveSpeed;
         [SerializeField] private float _maxSpeed;
@@ -22,8 +23,11 @@ namespace TankGame.TankController
 
         private void Update()
         {
-            _horizontalInput = Input.GetAxis("Horizontal");
-            _verticalInput = Input.GetAxis("Vertical");
+            if (IsOwner)
+            {
+                _horizontalInput = Input.GetAxis("Horizontal");
+                _verticalInput = Input.GetAxis("Vertical");
+            }
         }
 
         private void FixedUpdate()

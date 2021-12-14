@@ -98,6 +98,8 @@ GameObject:
   - component: {fileID: 4414128387095912565}
   - component: {fileID: 4414128387095912564}
   - component: {fileID: 8890086921454362426}
+  - component: {fileID: 8750228700695995139}
+  - component: {fileID: 7943521586682701133}
   m_Layer: 0
   m_Name: Tank
   m_TagString: Untagged
@@ -113,7 +115,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4414128387095912560}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.87, y: -4.8, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -134,8 +136,8 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 1
-  m_Mass: 1.6249524
-  m_LinearDrag: 0
+  m_Mass: 1.6236598
+  m_LinearDrag: 5
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -168,26 +170,26 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.55758786, y: 0.59854937}
-      - {x: 0.45656443, y: 0.60048246}
-      - {x: 0.43527782, y: 0.6635084}
-      - {x: -0.45163625, y: 0.6563597}
-      - {x: -0.46464664, y: 0.5987201}
-      - {x: -0.56250834, y: 0.5980711}
-      - {x: -0.6608713, y: 0.50041556}
-      - {x: -0.6595881, y: -0.43158484}
-      - {x: -0.5814797, y: -0.52502966}
-      - {x: -0.4612087, y: -0.5326085}
-      - {x: -0.46255296, y: -0.591197}
-      - {x: -0.3293316, y: -0.5917373}
-      - {x: -0.3284707, y: -0.6577505}
-      - {x: 0.33039904, y: -0.6540532}
-      - {x: 0.34935296, y: -0.59318495}
-      - {x: 0.46851206, y: -0.59357786}
-      - {x: 0.480572, y: -0.5269165}
-      - {x: 0.569263, y: -0.53117967}
-      - {x: 0.65846384, y: -0.44917107}
-      - {x: 0.6546972, y: 0.4973287}
+    - - {x: 0.568614, y: 0.5213666}
+      - {x: 0.48412967, y: 0.5315695}
+      - {x: 0.4395678, y: 0.5960307}
+      - {x: 0.34246743, y: 0.5948911}
+      - {x: 0.3139906, y: 0.6552386}
+      - {x: -0.31380987, y: 0.6536031}
+      - {x: -0.34611595, y: 0.59320736}
+      - {x: -0.44674024, y: 0.5898175}
+      - {x: -0.46878642, y: 0.5346708}
+      - {x: -0.5614593, y: 0.5336032}
+      - {x: -0.6608713, y: 0.44528508}
+      - {x: -0.6564632, y: -0.51567364}
+      - {x: -0.5639489, y: -0.5841198}
+      - {x: -0.47595382, y: -0.59119654}
+      - {x: -0.4347291, y: -0.6632085}
+      - {x: 0.43984693, y: -0.6622175}
+      - {x: 0.4808433, y: -0.5916915}
+      - {x: 0.56416726, y: -0.5923283}
+      - {x: 0.6533681, y: -0.50352526}
+      - {x: 0.66296685, y: 0.4311723}
 --- !u!114 &4414128387095912565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,9 +202,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 648d3e5c024ab174f9206950db256f54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _driveSpeed: 0
-  _maxSpeed: 0
-  _rotateSpeed: 0
+  _driveSpeed: 50
+  _maxSpeed: 5
+  _rotateSpeed: 5
 --- !u!114 &4414128387095912564
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +237,45 @@ MonoBehaviour:
   AlwaysReplicateAsRoot: 0
   DontDestroyWithOwner: 0
   AutoObjectParentSync: 1
+--- !u!114 &8750228700695995139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414128387095912560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SyncPositionX: 1
+  SyncPositionY: 1
+  SyncPositionZ: 1
+  SyncRotAngleX: 1
+  SyncRotAngleY: 1
+  SyncRotAngleZ: 1
+  SyncScaleX: 1
+  SyncScaleY: 1
+  SyncScaleZ: 1
+  PositionThreshold: 0.001
+  RotAngleThreshold: 0.01
+  ScaleThreshold: 0.01
+  InLocalSpace: 0
+  Interpolate: 1
+  CanCommitToTransform: 0
+--- !u!114 &7943521586682701133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4414128387095912560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d7c879794dfda4687da0e400131852, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4414128387161136908
 GameObject:
   m_ObjectHideFlags: 0

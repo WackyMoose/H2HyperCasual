@@ -278,7 +278,7 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 1
-  m_ApplyToSortingLayers: 00000000
+  m_ApplyToSortingLayers: 000000009d37368bcd79d926b5627f166ba3119445b7fb9b
   m_LightCookieSprite: {fileID: 0}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
@@ -362,6 +362,7 @@ GameObject:
   - component: {fileID: 1540426319}
   - component: {fileID: 1540426318}
   - component: {fileID: 1540426317}
+  - component: {fileID: 1540426320}
   m_Layer: 0
   m_Name: ===Managers===
   m_TagString: Untagged
@@ -406,13 +407,8 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 1540426317}
-    PlayerPrefab: {fileID: 0}
-    NetworkPrefabs:
-    - Override: 0
-      Prefab: {fileID: 4414128387095912560, guid: 70a30651297486442bc43b3423656cc4, type: 3}
-      SourcePrefabToOverride: {fileID: 4414128387095912560, guid: 70a30651297486442bc43b3423656cc4, type: 3}
-      SourceHashToOverride: 0
-      OverridingTargetPrefab: {fileID: 0}
+    PlayerPrefab: {fileID: 4414128387095912560, guid: 70a30651297486442bc43b3423656cc4, type: 3}
+    NetworkPrefabs: []
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -443,3 +439,15 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1540426320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1540426316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ee9428cea8b60438dc466a19ba5fbc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
