@@ -1,9 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Netcode;
-using Unity.Netcode.Transports;
-using Unity.Netcode.Samples;
-using Unity.Netcode.Components;
 using UnityEngine;
 
 namespace TankGame.TankController
@@ -54,7 +49,7 @@ namespace TankGame.TankController
             {
                 _oldHorizontalInput = _horizontalInput;
                 _oldVeritcalInput = _verticalInput;
-                UpdateClientPositionAndRotationServerRPC(_horizontalInput, _verticalInput);
+                UpdateClientPositionAndRotationServerRpc(_horizontalInput, _verticalInput);
             }
         }
 
@@ -78,7 +73,7 @@ namespace TankGame.TankController
         }
 
         [ServerRpc]
-        public void UpdateClientPositionAndRotationServerRPC(float newHorizontalInput, float newVerticalInput) 
+        public void UpdateClientPositionAndRotationServerRpc(float newHorizontalInput, float newVerticalInput) 
         {
             _networkHorizontalInput.Value = newHorizontalInput;
             _networkVerticalInput.Value = newVerticalInput;

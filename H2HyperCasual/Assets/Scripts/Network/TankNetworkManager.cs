@@ -3,7 +3,7 @@ using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using TMPro;
 
-namespace HelloWorld
+namespace TankGame.Managers
 {
     public class TankNetworkManager : MonoBehaviour
     {
@@ -15,6 +15,29 @@ namespace HelloWorld
         private void Awake()
         {
             _transport = GetComponent<UNetTransport>();
+
+            NetworkManager.Singleton.OnServerStarted += Singleton_OnServerStarted;
+            NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
+            NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnectCallback;
+        }
+
+        private void Singleton_OnServerStarted()
+        {
+            
+        }
+
+        private void Singleton_OnClientDisconnectCallback(ulong obj)
+        {
+            if (obj == NetworkManager.Singleton.LocalClientId)
+                return;
+        }
+
+        private void Singleton_OnClientConnectedCallback(ulong obj)
+        {
+            if (obj == NetworkManager.Singleton.LocalClientId)
+                return;
+
+            Debug.LogError($"{obj} connected, making the player count {NetworkManager.Singleton.ConnectedClients.Count}");
         }
 
         private void Update()
