@@ -18,3 +18,9 @@ go
 alter table [Matches]
 add foreign key (WinnerPlayerId) references Players(Id);
 go
+
+alter table [Matches]
+add foreign key (Id) references MatchStatus(Id);
+
+alter table [MatchKills]
+add foreign key (Id) references Matches(Id);

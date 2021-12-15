@@ -24,6 +24,7 @@ CREATE TABLE [Players]
 CREATE TABLE [Matches]
 (
 	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[MatchStatusId] INT NOT NULL,
 	[WinnerPlayerId] INT NOT NULL,
 	[PlayTime] INT NOT NULL
 );
@@ -32,7 +33,22 @@ CREATE TABLE [PlayerMatches]
 (
 	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[PlayerId] int NOT NULL,
+	[MatchId] int NOT NULL
+);
+
+CREATE TABLE [MatchKills]
+(
+	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
 	[MatchId] int NOT NULL,
+	[KillerPlayerId] int NOT NULL,
+	[KilledPlayerId] int NOT NULL,
+	[KillDistance] int NOT NULL
+);
+
+CREATE TABLE [MatchStatus]
+(
+	[Id] int NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[StatusName] NVARCHAR(32) NOT NULL
 );
 
 CREATE TABLE [Logs] (
