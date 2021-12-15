@@ -8,43 +8,19 @@ namespace TankGame.TankController
 {
     public class TurretRotation : NetworkBehaviour
     {
-        [SerializeField] private Camera _playerCamera;
         [SerializeField] private float _rotateSpeed;
 
         [SerializeField] private Transform _turret;
 
-        private NetworkVariable<float> _networkTurretAngle = new NetworkVariable<float>();
+        public Transform Turret { get { return _turret; } private set { _turret = value; } }
 
-        private void Update()
+        public void RotateTurret(float angle)
         {
-            if (IsOwner && IsClient)
+            if (angle != _turret.rotation.eulerAngles.z)
             {
-                HandleInput();
-            }
-
-            RotateTurret();
-        }
-        private void HandleInput()
-        {
-            var direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - _turret.position;
-            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            var rotation = Quaternion.AngleAxis(angle, _turret.transform.forward);
-            UpdateTurretRotationServerRpc(rotation.eulerAngles.z);
-        }
-
-        private void RotateTurret()
-        {
-            if (_networkTurretAngle.Value != _turret.rotation.eulerAngles.z)
-            {
-                var rot = Quaternion.Euler(new Vector3(0,0,_networkTurretAngle.Value + 90));
+                var rot = Quaternion.Euler(new Vector3(0,0, angle + 90));
                 _turret.rotation = Quaternion.Slerp(_turret.rotation,rot,_rotateSpeed*Time.deltaTime);
             }
-        }
-
-        [ServerRpc]
-        public void UpdateTurretRotationServerRpc(float newAngle) 
-        {
-            _networkTurretAngle.Value = newAngle;
         }
     }
 }

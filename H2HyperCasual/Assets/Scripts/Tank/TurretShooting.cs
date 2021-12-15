@@ -1,67 +1,48 @@
 using UnityEngine;
 using Unity.Netcode;
+using TankGame.Utils;
 using TankGame.TankUtils;
 
 namespace TankGame.TankController {
     public class TurretShooting : NetworkBehaviour
     {
+        [SerializeField] private NetworkObjectPool _networkObjectPool;
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private int _rateOfFire = 60;
+        [SerializeField] private GameObject _shellPrefab;
 
         private float _currShootTime;
 
-
-        private void Update()
+        private void Awake()
         {
-            if (IsOwner)
-            {
-                if (Input.GetMouseButtonDown(0) && _currShootTime < Time.time)
-                {
-                    _currShootTime = Time.time + (60 / (float)_rateOfFire);
-                    Shoot();
-                }
-            }
+            _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
         }
-
-        private void Shoot()
-        {
-            Debug.DrawRay(_shootingPoint.position, -_shootingPoint.up * 5, Color.red, 0.5f);
-            RaycastHit2D hit = Physics2D.Raycast(_shootingPoint.position, -_shootingPoint.up, Mathf.Infinity);
-            if (hit.collider != null)
-            {
-                DealDamageServerRPC(10, hit.collider.GetComponent<NetworkObject>().OwnerClientId);
-            }
-        }
-
 
         [ServerRpc]
-        public void DealDamageServerRPC(int damage, ulong idToDamage)
+        public void ShootServerRPC() 
         {
-            var tankToDamage = NetworkManager.Singleton.ConnectedClients[idToDamage].PlayerObject.GetComponent<TankHitpoints>();
-            if (tankToDamage == null)
-                return;
-
-            ClientRpcParams clientRpcParams = new ClientRpcParams
+            if (_currShootTime < Time.time)
             {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { idToDamage }
-                }
-            };
-
-            tankToDamage.GetComponent<TankHitpoints>().TakeDamage(damage);
-            TakeDamageClientRpc(damage, clientRpcParams);
-            //Debug.LogError("We send this");
+                _currShootTime = Time.time + (60 / (float)_rateOfFire);
+                //Shoot();
+            }
         }
 
-        [ClientRpc]
-        public void TakeDamageClientRpc(int damage, ClientRpcParams clientRpcParams = default)
-        {
-            if (IsOwner)
-                return;
+        //public void Shoot()
+        //{
+        //    var shell = _networkObjectPool.GetNetworkObject(_shellPrefab).gameObject;
+        //    shell.transform.position = _shootingPoint.position + _shootingPoint.up;
+        //    shell.transform.eulerAngles = _shootingPoint.eulerAngles;
+        //    var shellRb = shell.GetComponent<Rigidbody2D>();
 
-            Debug.LogError($"We took {damage}");
-            GetComponent<TankHitpoints>().TakeDamage(damage);
-        }
+        //    var velocity = GetComponent<Rigidbody2D>().velocity;
+        //    velocity += (Vector2)(shell.transform.up) * 10;
+        //    shellRb.velocity = velocity;
+
+        //    TankColor tankColor = (TankColor)Random.Range(0, 5);
+            
+        //    shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), 15,tankColor);
+        //    shell.GetComponent<NetworkObject>().Spawn(true);
+        //}
     }
 }

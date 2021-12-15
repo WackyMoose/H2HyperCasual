@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using TankGame.UI;
@@ -10,30 +8,30 @@ namespace TankGame.TankUtils
     public class TankHitpoints : NetworkBehaviour
     {
         [SerializeField] private TextMeshProUGUI _hpText;
-        [SerializeField] private int _hitPoints;
+        [SerializeField] private NetworkVariable<int> _hitPoints = new NetworkVariable<int>();
         private HitpointsUI _hitPointsUI;
 
         private void Awake()
         {
-            _hitPoints = 100;
-            _hpText.text = $"HP: {_hitPoints}";
+            _hitPoints.Value = 100;
+            _hpText.text = $"HP: {_hitPoints.Value}";
         }
 
-        public void TakeDamage(int damage)
-        {
-            _hitPoints -= damage;
-            _hpText.text = $"HP: {_hitPoints}";
-            
-            if (_hitPoints <= 0)
-            {
-                Debug.LogError($"We died");
-            }
-        }
-
-        //public void UpdateHPBar(int newHPAmount) 
+        //public void TakeDamage(int damage)
         //{
-        //    _hpText.text = $"HP: {newHPAmount}";
+        //    _hitPoints.Value -= damage;
+        //    _hpText.text = $"HP: {_hitPoints.Value}";
+
+        //    if (_hitPoints.Value <= 0)
+        //    {
+        //        Debug.LogError($"We died");
+        //    }
         //}
+
+        public void UpdateHPBar(int newHPAmount)
+        {
+            _hpText.text = $"HP: {newHPAmount}";
+        }
 
         public void DestroyTank() 
         {
