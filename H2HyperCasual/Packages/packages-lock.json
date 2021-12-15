@@ -94,6 +94,13 @@
       },
       "url": "https://packages.unity.com"
     },
+    "com.unity.cinemachine": {
+      "version": "2.8.3",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.collections": {
       "version": "1.0.0-pre.5",
       "depth": 1,

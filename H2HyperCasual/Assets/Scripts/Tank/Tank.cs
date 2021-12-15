@@ -127,7 +127,7 @@ namespace TankGame.TankController {
                 velocity += (Vector2)(shell.transform.up) * 5;
                 shellRb.velocity = velocity;
 
-                shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), 15);
+                shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), 10);
 
                 shell.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
             }

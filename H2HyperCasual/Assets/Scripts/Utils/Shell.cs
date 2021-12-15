@@ -11,15 +11,18 @@ namespace TankGame.TankUtils {
         private float _lifeTime;
         private Tank _ownerTank;
 
-
+        //TODO fix the lag problem!
         public void Setup(Tank owner, float lifeTime) 
         {
             _ownerTank = owner;
             _lifeTime = lifeTime;
 
+            GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
             if (IsServer)
             {
                 //Need some way to despawn it!
+                Invoke(nameof(DestroyBullet), _lifeTime);
             }
         }
 
