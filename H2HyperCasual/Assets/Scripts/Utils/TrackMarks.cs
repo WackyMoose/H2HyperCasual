@@ -2,34 +2,37 @@ using System.Collections;
 using UnityEngine;
 using Unity.Netcode;
 
-public class TrackMarks : NetworkBehaviour
+namespace TankGame.Utils
 {
-    private float _lifeTime;
-
-    public void Setup(float lifeTime) 
+    public class TrackMarks : NetworkBehaviour
     {
-        _lifeTime = lifeTime;
+        private float _lifeTime;
 
-        if (IsServer)
+        public void Setup(float lifeTime)
         {
-            StartCoroutine(DestroyTrackMarks());
-        }
-    }
+            _lifeTime = lifeTime;
 
-    public override void OnNetworkDespawn()
-    {
-        StopAllCoroutines();
-    }
-
-    IEnumerator DestroyTrackMarks()
-    {
-        if (!NetworkObject.IsSpawned)
-        {
-            yield return null;
+            if (IsServer)
+            {
+                StartCoroutine(DestroyTrackMarks());
+            }
         }
 
-        yield return new WaitForSeconds(_lifeTime);
+        public override void OnNetworkDespawn()
+        {
+            StopAllCoroutines();
+        }
 
-        NetworkObject.Despawn(true);
+        IEnumerator DestroyTrackMarks()
+        {
+            if (!NetworkObject.IsSpawned)
+            {
+                yield return null;
+            }
+
+            yield return new WaitForSeconds(_lifeTime);
+
+            NetworkObject.Despawn(true);
+        }
     }
 }
