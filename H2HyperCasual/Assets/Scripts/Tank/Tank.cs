@@ -12,8 +12,11 @@ namespace TankGame.TankController {
         [SerializeField] private float _tankRotateSpeed;
         [SerializeField] private float _turretRotateSpeed;
         [SerializeField] private int _rateOfFire = 60;
+        [SerializeField] private float _distanceBetweenTracks;
+        [SerializeField] private float _timeToDestroyTracks;
 
         [SerializeField] private Rigidbody2D _rigidBody2D;
+        [SerializeField] private Transform _tankBodyTransform;
         [SerializeField] private Transform _turretTransform;
         [SerializeField] private NetworkObjectPool _networkObjectPool;
 
@@ -24,11 +27,14 @@ namespace TankGame.TankController {
 
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private GameObject _shellPrefab;
+        [SerializeField] private GameObject _trackMarkPrefab;
 
         private float _currShootTime;
 
         private float _horizontalInput;
         private float _verticalInput;
+
+        private Vector2 _lastPosition = Vector2.zero;
         #endregion
 
         #region Updates and all that jazz
@@ -42,6 +48,7 @@ namespace TankGame.TankController {
             if (IsOwner && IsClient)
             {
                 HandleInput();
+                CreateTrackMarks();
             }
             
             RotateTurret();
@@ -94,7 +101,16 @@ namespace TankGame.TankController {
         }
         private void Shoot() 
         {
-            ShootServerRPC();
+            ShootServerRpc();
+        }
+        private void CreateTrackMarks() 
+        {
+            var distanceDriven = Vector2.Distance(transform.position, _lastPosition);
+            if (distanceDriven >= _distanceBetweenTracks)
+            {
+                _lastPosition = transform.position;
+                CreateTrackMarksServerRpc();
+            }
         }
         #endregion
 
@@ -113,24 +129,37 @@ namespace TankGame.TankController {
         }
 
         [ServerRpc]
-        public void ShootServerRPC()
+        public void ShootServerRpc()
         {
             if (_currShootTime < Time.time)
             {
                 _currShootTime = Time.time + (60 / (float)_rateOfFire);
+                
                 var shell = _networkObjectPool.GetNetworkObject(_shellPrefab).gameObject;
+                
                 shell.transform.position = _shootingPoint.position + _shootingPoint.up;
                 shell.transform.eulerAngles = _shootingPoint.eulerAngles;
+                
                 var shellRb = shell.GetComponent<Rigidbody2D>();
-
                 var velocity = GetComponent<Rigidbody2D>().velocity;
                 velocity += (Vector2)(shell.transform.up) * 5;
                 shellRb.velocity = velocity;
 
                 shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), 10);
-
                 shell.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
             }
+        }
+
+        [ServerRpc]
+        public void CreateTrackMarksServerRpc() 
+        {
+            var track = _networkObjectPool.GetNetworkObject(_trackMarkPrefab).gameObject;
+            
+            track.transform.position = _tankBodyTransform.position;
+            track.transform.rotation = _tankBodyTransform.rotation;
+            
+            track.GetComponent<TrackMarks>().Setup(_timeToDestroyTracks);
+            track.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
         }
         #endregion
 

@@ -129,12 +129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3aed6e3f5b515944599414171983551b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shellGraphics:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _explosionPrefab: {fileID: 5244205450737699840, guid: f179076539eb0c54a9a0ce27f3cbe76d, type: 3}
   _shellDamage: 10
 --- !u!114 &6763404093521873690
 MonoBehaviour:
