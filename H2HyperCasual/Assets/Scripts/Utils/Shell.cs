@@ -2,6 +2,7 @@ using TankGame.TankController;
 using UnityEngine;
 using Unity.Netcode;
 using System.Collections.Generic;
+using System.Collections;
 
 namespace TankGame.TankUtils {
     public class Shell : NetworkBehaviour
@@ -22,24 +23,30 @@ namespace TankGame.TankUtils {
             if (IsServer)
             {
                 //Need some way to despawn it!
-                Invoke(nameof(DestroyBullet), _lifeTime);
+                StartCoroutine(DestroyBullet());
             }
         }
 
         public override void OnNetworkDespawn()
         {
             //Create a explosion particles/animation
+            StopAllCoroutines();
         }
 
-        private void DestroyBullet()
+        
+
+        IEnumerator DestroyBullet()
         {
             if (!NetworkObject.IsSpawned)
             {
-                return;
+                yield return null;
             }
+
+            yield return new WaitForSeconds(_lifeTime);
 
             NetworkObject.Despawn(true);
         }
+
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var collisionObject = collision.gameObject;
