@@ -1,13 +1,12 @@
 using TankGame.TankController;
 using UnityEngine;
 using Unity.Netcode;
-using System.Collections.Generic;
 using System.Collections;
 
 namespace TankGame.TankUtils {
     public class Shell : NetworkBehaviour
     {
-        [SerializeField] private List<GameObject> _shellGraphics = new List<GameObject>();
+        [SerializeField] private GameObject _explosionPrefab;
         [SerializeField] private int _shellDamage = 10;
         private float _lifeTime;
         private Tank _ownerTank;
@@ -23,19 +22,31 @@ namespace TankGame.TankUtils {
             if (IsServer)
             {
                 //Need some way to despawn it!
-                StartCoroutine(DestroyBullet());
+                StartCoroutine(DestroyBulletAfterLifeTime());
             }
         }
 
         public override void OnNetworkDespawn()
         {
             //Create a explosion particles/animation
+
+            var exp = Instantiate(_explosionPrefab, transform.position, Quaternion.identity);
+            Destroy(exp, 1);
+
             StopAllCoroutines();
         }
 
-        
+        private void DestroyBullet() 
+        {
+            if (!NetworkObject.IsSpawned)
+            {
+                return;
+            }
 
-        IEnumerator DestroyBullet()
+            NetworkObject.Despawn(true);
+        }
+
+        IEnumerator DestroyBulletAfterLifeTime()
         {
             if (!NetworkObject.IsSpawned)
             {

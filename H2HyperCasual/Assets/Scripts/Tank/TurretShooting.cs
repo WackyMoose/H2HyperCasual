@@ -1,7 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
 using TankGame.Utils;
-using TankGame.TankUtils;
 
 namespace TankGame.TankController {
     public class TurretShooting : NetworkBehaviour
