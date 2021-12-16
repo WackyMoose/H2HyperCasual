@@ -1,6 +1,7 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class LoginRequest
@@ -27,19 +28,27 @@ public class Player
 
 public class APIManager : MonoBehaviour
 {
+    [SerializeField] private TMP_InputField playerNameInput;
+    [SerializeField] private TMP_InputField passwordInput;
+    [SerializeField] private Button loginButton;
+
     private HttpRequest _httpRequest;
 
     private void Start()
     {
-        Task.Run(async () =>
-        {
-            _httpRequest = new HttpRequest();
-            var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", new LoginRequest { playerName = "kingoboiii", password = "test1234" });
-            Debug.Log(loginResponse.accessToken);
+        _httpRequest = new HttpRequest();
+        loginButton.onClick.AddListener(Login);
+    }
 
-            var player = await _httpRequest.GetAsync<Player>("https://api.victorkrogh.dk/api/Player/get-player?id=2", loginResponse.accessToken);
-            Debug.Log($"Player name: {player.playerName}");
-            Debug.Log(JsonUtility.ToJson(player));
-        });
+    private async void Login()
+    {
+        var loginRequest = new LoginRequest
+        {
+            playerName = playerNameInput.text,
+            password = passwordInput.text
+        };
+
+        var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
+        Debug.Log(loginResponse.accessToken);
     }
 }
