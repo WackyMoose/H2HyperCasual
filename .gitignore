@@ -10,6 +10,8 @@ H2HyperCasual/[Bb]uilds/
 H2HyperCasual/[Ll]ogs/
 H2HyperCasual/[Mm]emoryCaptures/
 
+H2HyperCasual/UserSettings/EditorUserSettings.asset
+
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
 
