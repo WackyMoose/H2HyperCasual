@@ -478,10 +478,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1307095112}
     m_Modifications:
-    - target: {fileID: 645305244082332922, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
-      propertyPath: m_Name
-      value: ButtonHolder
-      objectReference: {fileID: 0}
     - target: {fileID: 4323493828916239256, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -525,22 +521,6 @@ PrefabInstance:
     - target: {fileID: 4323493829270658422, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4323493829666593479, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
-      propertyPath: m_text
-      value: ' Login or Register'
-      objectReference: {fileID: 0}
-    - target: {fileID: 4323493829666593479, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
-      propertyPath: m_fontSize
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4323493829666593479, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
-      propertyPath: m_fontSizeBase
-      value: 24
-      objectReference: {fileID: 0}
-    - target: {fileID: 4323493829666593479, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
-      propertyPath: m_VerticalAlignment
-      value: 512
       objectReference: {fileID: 0}
     - target: {fileID: 4323493829714460217, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
       propertyPath: m_AnchorMax.y
@@ -568,7 +548,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4323493830470443740, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
       propertyPath: m_Name
-      value: LoginPanel
+      value: LoginRegisterPanel
       objectReference: {fileID: 0}
     - target: {fileID: 4323493830470443741, guid: d5a1dfa2b30bd3d4592325b879048a8e, type: 3}
       propertyPath: m_Pivot.x
