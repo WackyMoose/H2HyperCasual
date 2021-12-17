@@ -175,7 +175,7 @@ TextureImporter:
         width: 224
         height: 134
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -183,6 +183,300 @@ TextureImporter:
       bones: []
       spriteID: 8b8ac55a826138e49b40589ad605e8bc
       internalID: -987049768
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_3
+      rect:
+        serializedVersion: 2
+        x: 386
+        y: 834
+        width: 208
+        height: 89
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b55b05f403f4f44baa2aaff2c6ef533
+      internalID: -1846353400
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_4
+      rect:
+        serializedVersion: 2
+        x: 637
+        y: 806
+        width: 177
+        height: 198
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86d9d6609a8c95d49b297aad7305a565
+      internalID: 741625563
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_6
+      rect:
+        serializedVersion: 2
+        x: 105
+        y: 844
+        width: 48
+        height: 95
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ab2e75c95a399e1429369925d7ae8213
+      internalID: 1553941848
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_7
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 849
+        width: 48
+        height: 87
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 10, y: 0, z: 5, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0105d963565a60d40aaee67e445d8ad6
+      internalID: -490333159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_8
+      rect:
+        serializedVersion: 2
+        x: 35
+        y: 799
+        width: 9
+        height: 26
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35c68446c4b35804ca971aee05e3cf18
+      internalID: -1863067993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_9
+      rect:
+        serializedVersion: 2
+        x: 191
+        y: 960
+        width: 44
+        height: 44
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 5, y: 5, z: 5, w: 5}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 368a5459ed982244ab564ea652d456e5
+      internalID: 876084758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_10
+      rect:
+        serializedVersion: 2
+        x: 24
+        y: 960
+        width: 54
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 11295383ca7209e4dbdbc38cfb1c26af
+      internalID: -219165505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_11
+      rect:
+        serializedVersion: 2
+        x: 679
+        y: 475
+        width: 128
+        height: 40
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 61ee375f5d9ad20468b0537964b7a394
+      internalID: 1070835315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_12
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 332
+        width: 129
+        height: 128
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: befc9c533244f7d4cbb47bcccfc72ab1
+      internalID: -96810212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_13
+      rect:
+        serializedVersion: 2
+        x: 766
+        y: 422
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b14bfccdf41e5ab48a9e6bfef53179ce
+      internalID: -1743955513
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_14
+      rect:
+        serializedVersion: 2
+        x: 717
+        y: 422
+        width: 49
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4dc24cd84dfd3d243b8ab4cbf7b9c223
+      internalID: 82294776
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_15
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 422
+        width: 40
+        height: 38
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b339aa953866e547920e896647b6b81
+      internalID: 383833944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_16
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 332
+        width: 39
+        height: 36
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 21379f5731321234a8f36d76cdfb05af
+      internalID: 1051791551
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BuildingSheet_17
+      rect:
+        serializedVersion: 2
+        x: 677
+        y: 368
+        width: 39
+        height: 54
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a8495e40bb4ce848b1207703fbc70ab
+      internalID: 196562707
       vertices: []
       indices: 
       edges: []
@@ -199,10 +493,22 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       BuildingSheet_2: -663761320
+      BuildingSheet_14: 82294776
       BuildingSheet_0: -987049768
+      BuildingSheet_10: -219165505
+      BuildingSheet_16: 1051791551
       BuildingSheet_5: 1683754480
       BuildingSheet_4: 741625563
+      BuildingSheet_11: 1070835315
+      BuildingSheet_15: 383833944
+      BuildingSheet_12: -96810212
+      BuildingSheet_9: 876084758
       BuildingSheet_3: -1846353400
+      BuildingSheet_6: 1553941848
+      BuildingSheet_13: -1743955513
+      BuildingSheet_17: 196562707
+      BuildingSheet_8: -1863067993
+      BuildingSheet_7: -490333159
       BuildingSheet_1: -1736163527
   spritePackingTag: 
   pSDRemoveMatte: 0
