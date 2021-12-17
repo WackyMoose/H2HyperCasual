@@ -307,7 +307,7 @@ MonoBehaviour:
   _tankRotateSpeed: 5
   _turretRotateSpeed: 5
   _rateOfFire: 60
-  _shellVelocity: 7
+  _shellVelocity: 10
   _shellLifeTime: 10
   _distanceBetweenTracks: 0.35
   _trackMarksLifeTime: 3
