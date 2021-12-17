@@ -307,8 +307,11 @@ MonoBehaviour:
   _tankRotateSpeed: 5
   _turretRotateSpeed: 5
   _rateOfFire: 60
+  _shellVelocity: 10
+  _shellLifeTime: 10
   _distanceBetweenTracks: 0.35
-  _timeToDestroyTracks: 3
+  _trackMarksLifeTime: 3
+  _graphics: {fileID: 4414128387161136908}
   _rigidBody2D: {fileID: 4414128387095912567}
   _tankBodyTransform: {fileID: 4414128387161136909}
   _turretTransform: {fileID: 4414128388546748595}
@@ -320,7 +323,7 @@ MonoBehaviour:
   _networkTurretAngle:
     m_InternalValue: 0
   _networkHitPoints:
-    m_InternalValue: 0
+    m_InternalValue: 100
   _shootingPoint: {fileID: 4414128387937535723}
   _shellPrefab: {fileID: 6763404093521873695, guid: 33c73458dbb02304a8f728f130d6253e, type: 3}
   _trackMarkPrefab: {fileID: 2198408997795992882, guid: cb499d89aa7d8b147b3791db01f79160, type: 3}
@@ -394,7 +397,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4414128387161136909
 Transform:
   m_ObjectHideFlags: 0

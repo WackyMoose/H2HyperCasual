@@ -12,7 +12,7 @@ namespace TankGame.Managers
         [SerializeField] private TMP_InputField _ipInputField;
         [SerializeField] private TMP_InputField _portInputField;
 
-        private void Awake()
+        private void Start()
         {
             _transport = GetComponent<UNetTransport>();
 

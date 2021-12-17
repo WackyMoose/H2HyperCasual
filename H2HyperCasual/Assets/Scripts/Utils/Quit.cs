@@ -1,12 +1,15 @@
 using UnityEngine;
 
-public class Quit : MonoBehaviour
+namespace TankGame.Utils
 {
-    void Update()
+    public class Quit : MonoBehaviour
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        void Update()
         {
-            Application.Quit();
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Application.Quit();
+            }
         }
     }
 }

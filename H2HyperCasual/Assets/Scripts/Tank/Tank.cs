@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Netcode;
 using TankGame.TankUtils;
 using TankGame.Utils;
+using Unity.Netcode.Samples;
 
 namespace TankGame.TankController {
     public class Tank : NetworkBehaviour
@@ -12,9 +13,12 @@ namespace TankGame.TankController {
         [SerializeField] private float _tankRotateSpeed;
         [SerializeField] private float _turretRotateSpeed;
         [SerializeField] private int _rateOfFire = 60;
+        [SerializeField] private float _shellVelocity;
+        [SerializeField] private float _shellLifeTime;
         [SerializeField] private float _distanceBetweenTracks;
-        [SerializeField] private float _timeToDestroyTracks;
+        [SerializeField] private float _trackMarksLifeTime;
 
+        [SerializeField] private GameObject _graphics;
         [SerializeField] private Rigidbody2D _rigidBody2D;
         [SerializeField] private Transform _tankBodyTransform;
         [SerializeField] private Transform _turretTransform;
@@ -43,15 +47,32 @@ namespace TankGame.TankController {
             _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
         }
 
+        public override void OnNetworkSpawn()
+        {
+            base.OnNetworkSpawn();
+
+            transform.position = NetworkManager.GetComponent<PlayerSpawner>().GetNextSpawnPosition();
+
+            _graphics.SetActive(true);
+        }
+
         private void Update()
         {
             if (IsOwner && IsClient)
             {
                 HandleInput();
                 CreateTrackMarks();
+
+                //Debug.Log($"{OwnerClientId} is on tick: {NetworkManager.Singleton.LocalTime.Tick}");
+                //Debug.Log($"Time diff from server is: {NetworkManager.Singleton.LocalTime.TimeTicksAgo(NetworkManager.ServerTime.Tick).TimeAsFloat}");
+                //Debug.Log($"Time diff from client is: {NetworkManager.Singleton.LocalTime.TimeTicksAgo(NetworkManager.Singleton.LocalTime.Tick).TimeAsFloat}");
             }
-            
+
+            //Debug.Log($"Servertick: {NetworkManager.ServerTime.Tick}");
+
             RotateTurret();
+
+            //NetworkManager.Singleton.world
         }
 
         private void FixedUpdate()
@@ -142,10 +163,10 @@ namespace TankGame.TankController {
                 
                 var shellRb = shell.GetComponent<Rigidbody2D>();
                 var velocity = GetComponent<Rigidbody2D>().velocity;
-                velocity += (Vector2)(shell.transform.up) * 5;
+                velocity += (Vector2)(shell.transform.up) * _shellVelocity;
                 shellRb.velocity = velocity;
 
-                shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), 10);
+                shell.GetComponent<Shell>().Setup(GetComponent<Tank>(), _shellLifeTime, OwnerClientId);
                 shell.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
             }
         }
@@ -158,7 +179,7 @@ namespace TankGame.TankController {
             track.transform.position = _tankBodyTransform.position;
             track.transform.rotation = _tankBodyTransform.rotation;
             
-            track.GetComponent<TrackMarks>().Setup(_timeToDestroyTracks);
+            track.GetComponent<TrackMarks>().Setup(_trackMarksLifeTime);
             track.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
         }
         #endregion
@@ -168,6 +189,20 @@ namespace TankGame.TankController {
         {
             Debug.LogError($"{damagingTank.name} dealth {damage} to us!");
             _networkHitPoints.Value = _networkHitPoints.Value - damage;
+
+            if (_networkHitPoints.Value <= 0)
+            {
+                _networkHitPoints.Value = 0;
+
+                //TODO Blow up, or something like that
+
+                _networkHitPoints.Value = 100;
+
+                transform.position = NetworkManager.GetComponent<PlayerSpawner>().GetNextSpawnPosition();
+
+                _rigidBody2D.velocity = Vector2.zero;
+                _rigidBody2D.angularVelocity = 0;
+            }
         }
         #endregion
     }

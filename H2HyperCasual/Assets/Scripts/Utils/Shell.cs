@@ -10,19 +10,20 @@ namespace TankGame.TankUtils {
         [SerializeField] private int _shellDamage = 10;
         private float _lifeTime;
         private Tank _ownerTank;
+        private ulong _ownerID;
 
         //TODO fix the lag problem!
-        public void Setup(Tank owner, float lifeTime) 
+        public void Setup(Tank owner, float lifeTime, ulong ownerID) 
         {
             _ownerTank = owner;
             _lifeTime = lifeTime;
-
+            _ownerID = ownerID;
             GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
             if (IsServer)
             {
                 //Need some way to despawn it!
-                StartCoroutine(DestroyBulletAfterLifeTime());
+                //StartCoroutine(DestroyBulletAfterLifeTime(_lifeTime));
             }
         }
 
@@ -36,40 +37,37 @@ namespace TankGame.TankUtils {
             StopAllCoroutines();
         }
 
-        private void DestroyBullet() 
-        {
-            if (!NetworkObject.IsSpawned)
-            {
-                return;
-            }
+        //IEnumerator DestroyBulletAfterLifeTime(float time)
+        //{
+        //    if (!NetworkObject.IsSpawned)
+        //    {
+        //        yield return null;
+        //    }
 
-            NetworkObject.Despawn(true);
-        }
+        //    yield return new WaitForSeconds(time);
 
-        IEnumerator DestroyBulletAfterLifeTime()
-        {
-            if (!NetworkObject.IsSpawned)
-            {
-                yield return null;
-            }
-
-            yield return new WaitForSeconds(_lifeTime);
-
-            NetworkObject.Despawn(true);
-        }
+        //    NetworkObject.Despawn(true);
+        //}
 
         private void OnCollisionEnter2D(Collision2D collision)
         {
             var collisionObject = collision.gameObject;
 
-            if (NetworkManager.Singleton.IsServer == false ||NetworkObject.IsSpawned == false)
+            if (NetworkManager.Singleton.IsServer == false || NetworkObject.IsSpawned == false)
             {
                 return;
             }
 
+            //var delay = NetworkManager.ConnectedClients[_ownerID].PlayerObject.NetworkManager.LocalTime.Tick - NetworkManager.ServerTime.Tick;
+            //Debug.Log($"Delay: {delay}");
+
+            Debug.Log($"{NetworkManager.Singleton.ServerTime.Tick}");
+
             if (collisionObject.CompareTag("Obstacle"))
             {
-                DestroyBullet();
+                //StartCoroutine(DestroyBulletAfterLifeTime(1));
+                DestroyShellClientRpc(NetworkManager.Singleton.ServerTime.TimeAsFloat);
+
             }
 
             if (collisionObject.TryGetComponent<Tank>(out var tank))
@@ -78,9 +76,29 @@ namespace TankGame.TankUtils {
                 if (tank != _ownerTank)
                 {
                     tank.TakeDamage(_shellDamage,_ownerTank);
-                    DestroyBullet();
+                    //StartCoroutine(DestroyBulletAfterLifeTime(0));
+                    DestroyShellClientRpc(NetworkManager.Singleton.ServerTime.TimeAsFloat);
                 }
             }
+        }
+
+        [ClientRpc]
+        public void DestroyShellClientRpc(float serverTime) 
+        {
+            Debug.Log($"{NetworkObject.NetworkManager.LocalTime.Tick}");
+            
+            DestroyBulletServerRpc();
+        }
+
+        [ServerRpc]
+        private void DestroyBulletServerRpc()
+        {
+            if (!NetworkObject.IsSpawned)
+            {
+                return;
+            }
+
+            NetworkObject.Despawn(true);
         }
     }
 }

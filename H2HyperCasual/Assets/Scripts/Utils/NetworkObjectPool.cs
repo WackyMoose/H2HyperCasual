@@ -10,7 +10,7 @@ namespace TankGame.Utils
     public class NetworkObjectPool : MonoBehaviour
     {
         [SerializeField]
-        NetworkManager m_NetworkManager;
+        NetworkManager _NetworkManager;
 
         [SerializeField]
         List<PoolConfigObject> PooledPrefabsList;
@@ -103,7 +103,7 @@ namespace TankGame.Utils
             }
 
             // Register MLAPI Spawn handlers
-            m_NetworkManager.PrefabHandler.AddHandler(prefab, new DummyPrefabInstanceHandler(prefab, this));
+            _NetworkManager.PrefabHandler.AddHandler(prefab, new DummyPrefabInstanceHandler(prefab, this));
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -165,23 +165,23 @@ namespace TankGame.Utils
 
     class DummyPrefabInstanceHandler : INetworkPrefabInstanceHandler
     {
-        GameObject m_Prefab;
-        NetworkObjectPool m_Pool;
+        GameObject _Prefab;
+        NetworkObjectPool _Pool;
 
         public DummyPrefabInstanceHandler(GameObject prefab, NetworkObjectPool pool)
         {
-            m_Prefab = prefab;
-            m_Pool = pool;
+            _Prefab = prefab;
+            _Pool = pool;
         }
 
         public NetworkObject Instantiate(ulong ownerClientId, Vector3 position, Quaternion rotation)
         {
-            return m_Pool.GetNetworkObject(m_Prefab, position, rotation);
+            return _Pool.GetNetworkObject(_Prefab, position, rotation);
         }
 
         public void Destroy(NetworkObject networkObject)
         {
-            m_Pool.ReturnNetworkObject(networkObject, m_Prefab);
+            _Pool.ReturnNetworkObject(networkObject, _Prefab);
         }
     }
 }
