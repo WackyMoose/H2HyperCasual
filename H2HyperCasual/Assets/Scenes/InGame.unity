@@ -621,6 +621,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BuildingSheet_0 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5985156628707274233, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
 --- !u!1 &137851071
@@ -840,6 +844,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8100759110013792305, guid: cba187b948e194b46b752632d449ad0f, type: 3}
   m_PrefabInstance: {fileID: 183076956}
   m_PrefabAsset: {fileID: 0}
+--- !u!224 &189465429 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5248260575259731523, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+  m_PrefabInstance: {fileID: 5248260575924974162}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &211301590
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -919,7 +928,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6069111133771057112, guid: afcb30403bf94fe4f962becaad0f62cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12.57
+      value: -12.48
       objectReference: {fileID: 0}
     - target: {fileID: 6069111133771057112, guid: afcb30403bf94fe4f962becaad0f62cd, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1025,6 +1034,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 3805665624694343600, guid: f6b9a935464741740adb16d8e692b955, type: 3}
   m_PrefabInstance: {fileID: 228665288}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &236229021 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5248260574646342739, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+  m_PrefabInstance: {fileID: 5248260575924974162}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &314425695 stripped
 Transform:
@@ -3815,6 +3829,10 @@ PrefabInstance:
     - target: {fileID: 5985156628707274233, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
       propertyPath: m_Name
       value: BuildingSheet_0 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5985156628707274233, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
@@ -12663,7 +12681,16 @@ PrefabInstance:
       propertyPath: _SpawnPositions.Array.data[7]
       value: 
       objectReference: {fileID: 1359705019}
-    m_RemovedComponents: []
+    - target: {fileID: 8210391612080409006, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
+      propertyPath: _hpBar
+      value: 
+      objectReference: {fileID: 236229021}
+    - target: {fileID: 8210391612080409006, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
+      propertyPath: _hpBarwhite
+      value: 
+      objectReference: {fileID: 189465429}
+    m_RemovedComponents:
+    - {fileID: 8210391612080409006, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
 --- !u!1001 &1428247984867472328
 PrefabInstance:
@@ -12941,6 +12968,34 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5248260574634704494, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574634704494, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574634704494, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574646342736, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.b
+      value: 0.41485694
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574646342736, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8679245
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574646342736, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_Color.r
+      value: 0.47697103
+      objectReference: {fileID: 0}
+    - target: {fileID: 5248260574646342739, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a8b824b2a7c5da845a70f9c3ccf767a8, type: 3}
 --- !u!1001 &6006350084183037077
@@ -13128,6 +13183,10 @@ PrefabInstance:
     - target: {fileID: 5985156628707274233, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
       propertyPath: m_Name
       value: BuildingSheet_0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5985156628707274233, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}
+      propertyPath: m_TagString
+      value: Obstacle
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 491b7cdcf35bf194e870f26cf9a713ff, type: 3}

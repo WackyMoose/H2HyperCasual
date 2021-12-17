@@ -2,7 +2,6 @@ using UnityEngine;
 using Unity.Netcode;
 using TankGame.TankUtils;
 using TankGame.Utils;
-using Unity.Netcode.Samples;
 
 namespace TankGame.TankController {
     public class Tank : NetworkBehaviour
@@ -23,11 +22,14 @@ namespace TankGame.TankController {
         [SerializeField] private Transform _tankBodyTransform;
         [SerializeField] private Transform _turretTransform;
         [SerializeField] private NetworkObjectPool _networkObjectPool;
+        [SerializeField] private RectTransform _hpBar;
+        [SerializeField] private RectTransform _hpBarWhite;
 
         [SerializeField] private NetworkVariable<float> _networkHorizontalInput = new NetworkVariable<float>();
         [SerializeField] private NetworkVariable<float> _networkVerticalInput = new NetworkVariable<float>();
         [SerializeField] private NetworkVariable<float> _networkTurretAngle = new NetworkVariable<float>();
         [SerializeField] private NetworkVariable<int> _networkHitPoints = new NetworkVariable<int>(100);
+        [SerializeField] private NetworkVariable<float> _networkHitPointsScale = new NetworkVariable<float>(1);
 
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private GameObject _shellPrefab;
@@ -45,6 +47,7 @@ namespace TankGame.TankController {
         private void Awake()
         {
             _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
+            _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
         }
 
         public override void OnNetworkSpawn()
@@ -133,6 +136,10 @@ namespace TankGame.TankController {
                 CreateTrackMarksServerRpc();
             }
         }
+        private void UpdateHpBar() 
+        {
+            _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
+        }
         #endregion
 
         #region RPC
@@ -182,6 +189,16 @@ namespace TankGame.TankController {
             track.GetComponent<TrackMarks>().Setup(_trackMarksLifeTime);
             track.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
         }
+
+        [ClientRpc]
+        public void UpdateHpBarClientRpc(float newScale, ClientRpcParams clientRpcParams) 
+        {
+            Debug.LogWarning($"We are updating the HpBar on {OwnerClientId}");
+            _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
+            if (IsOwner)
+                return;
+
+        }
         #endregion
 
         #region Public Methods
@@ -189,6 +206,21 @@ namespace TankGame.TankController {
         {
             Debug.LogError($"{damagingTank.name} dealth {damage} to us!");
             _networkHitPoints.Value = _networkHitPoints.Value - damage;
+
+            _networkHitPointsScale.Value = (float)_networkHitPoints.Value / 100;
+            //Debug.LogError(_networkHitPointsScale.Value);
+
+            ClientRpcParams clientRpcParams = new ClientRpcParams
+            {
+                Send = new ClientRpcSendParams
+                {
+                    TargetClientIds = new ulong[] { OwnerClientId }
+                }
+            };
+
+            UpdateHpBarClientRpc(_networkHitPointsScale.Value, clientRpcParams);
+
+            //TODO Generate smoke when are low on HP...
 
             if (_networkHitPoints.Value <= 0)
             {
