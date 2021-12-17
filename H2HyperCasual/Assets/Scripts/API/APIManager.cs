@@ -28,24 +28,22 @@ public class Player
 
 public class APIManager : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField playerNameInput;
-    [SerializeField] private TMP_InputField passwordInput;
-    [SerializeField] private Button loginButton;
+    public static APIManager _instance;
 
     private HttpRequest _httpRequest;
 
-    private void Start()
+    private void Awake()
     {
+        _instance = this;
         _httpRequest = new HttpRequest();
-        loginButton.onClick.AddListener(Login);
     }
 
-    private async void Login()
+    public async Task Login(string playerName, string password)
     {
         var loginRequest = new LoginRequest
         {
-            playerName = playerNameInput.text,
-            password = passwordInput.text
+            playerName = playerName,
+            password = password
         };
 
         var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
