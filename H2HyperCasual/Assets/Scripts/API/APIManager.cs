@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class LoginRequest
+public class AuthRequest
 {
     public string playerName;
     public string password;
@@ -17,6 +17,13 @@ public class LoginResponse
     public Player player;
 }
 
+[System.Serializable]
+public class RegisterResponse
+{
+    public Player player;
+}
+
+[System.Serializable]
 public class Player
 {
     public int id;
@@ -40,7 +47,7 @@ public class APIManager : MonoBehaviour
 
     public async Task Login(string playerName, string password)
     {
-        var loginRequest = new LoginRequest
+        var loginRequest = new AuthRequest
         {
             playerName = playerName,
             password = password
@@ -48,5 +55,17 @@ public class APIManager : MonoBehaviour
 
         var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
         Debug.Log(loginResponse.accessToken);
+    }
+
+    public async Task Register(string playerName, string password)
+    {
+        var registerRequest = new AuthRequest
+        {
+            playerName = playerName,
+            password = password
+        };
+
+        var registerResponse = await _httpRequest.PostAsync<RegisterResponse>("https://api.victorkrogh.dk/api/Auth/register", registerRequest);
+        Debug.Log(registerResponse.player.playerName);
     }
 }
