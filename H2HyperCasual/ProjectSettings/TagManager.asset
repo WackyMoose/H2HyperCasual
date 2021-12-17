@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Obstacle
+  - HpBar
+  - HpBarWhite
   layers:
   - Default
   - TransparentFX
