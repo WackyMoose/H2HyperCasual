@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+[System.Serializable]
 public class PlayerMatch
 {
-    int id;
-    int playerId;
-    int matchId;
-    int playerMatchKills;
-    int playerMatchDeaths;
+    public int id;
+    public int playerId;
+    public int matchId;
+    public int playerMatchKills;
+    public int playerMatchDeaths;
 }

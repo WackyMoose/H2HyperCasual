@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
+[System.Serializable]
 public class Player
 {
-    int id;
-    string playerName;
-    int kills;
-    int deaths;
+    public int id;
+    public string playerName;
+    public int kills;
+    public int deaths;
 }

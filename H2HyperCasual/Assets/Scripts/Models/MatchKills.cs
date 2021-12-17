@@ -1,9 +1,10 @@
 
+[System.Serializable]
 public class MatchKill
 {
-    int id;
-    int matchId;
-    int killerPlayerId;
-    int killedPlayerId;
-    int killDistance;
+    public int id;
+    public int matchId;
+    public int killerPlayerId;
+    public int killedPlayerId;
+    public int killDistance;
 }

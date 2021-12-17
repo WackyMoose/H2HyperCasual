@@ -1,8 +1,9 @@
 
+[System.Serializable]
 public class Match
 {
-    int id;
-    int winnerPlayerId;
-    int matchStatus;
-    int playTime;
+    public int id;
+    public int winnerPlayerId;
+    public int matchStatus;
+    public int playTime;
 }

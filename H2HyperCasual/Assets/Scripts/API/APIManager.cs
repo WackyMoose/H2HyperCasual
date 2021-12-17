@@ -23,16 +23,6 @@ public class RegisterResponse
     public Player player;
 }
 
-[System.Serializable]
-public class Player
-{
-    public int id;
-    public string playerName;
-    public int kills;
-    public int deaths;
-}
-
-
 public class APIManager : MonoBehaviour
 {
     public static APIManager _instance;
