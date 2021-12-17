@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [System.Serializable]
-public class LoginRequest
+public class AuthRequest
 {
     public string playerName;
     public string password;
@@ -17,6 +17,13 @@ public class LoginResponse
     public Player player;
 }
 
+[System.Serializable]
+public class RegisterResponse
+{
+    public Player player;
+}
+
+[System.Serializable]
 public class Player
 {
     public int id;
@@ -28,27 +35,37 @@ public class Player
 
 public class APIManager : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField playerNameInput;
-    [SerializeField] private TMP_InputField passwordInput;
-    [SerializeField] private Button loginButton;
+    public static APIManager _instance;
 
     private HttpRequest _httpRequest;
 
-    private void Start()
+    private void Awake()
     {
+        _instance = this;
         _httpRequest = new HttpRequest();
-        loginButton.onClick.AddListener(Login);
     }
 
-    private async void Login()
+    public async Task Login(string playerName, string password)
     {
-        var loginRequest = new LoginRequest
+        var loginRequest = new AuthRequest
         {
-            playerName = playerNameInput.text,
-            password = passwordInput.text
+            playerName = playerName,
+            password = password
         };
 
         var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
         Debug.Log(loginResponse.accessToken);
+    }
+
+    public async Task Register(string playerName, string password)
+    {
+        var registerRequest = new AuthRequest
+        {
+            playerName = playerName,
+            password = password
+        };
+
+        var registerResponse = await _httpRequest.PostAsync<RegisterResponse>("https://api.victorkrogh.dk/api/Auth/register", registerRequest);
+        Debug.Log(registerResponse.player.playerName);
     }
 }
