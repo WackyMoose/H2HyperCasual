@@ -31,4 +31,9 @@ public class MatchData : MonoBehaviour
 
         return false;
     }
+
+    public bool SetMatchWinner()
+    {
+
+    }
 }
