@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
+using Newtonsoft.Json;
 
 public class HttpRequest
 {
@@ -23,7 +24,7 @@ public class HttpRequest
         }
 
         var response = await httpResponse.Content.ReadAsStringAsync();
-        return JsonUtility.FromJson<TEntity>(response);
+        return JsonConvert.DeserializeObject<TEntity>(response);
     }
 
     public async Task<TEntity> PostAsync<TEntity>(string url, object body = null)
@@ -32,7 +33,7 @@ public class HttpRequest
         var httpResponse = await SendRequestAsync(url, HttpMethod.Post, httpContent: bodyContent);
 
         var response = await httpResponse.Content.ReadAsStringAsync();
-        return JsonUtility.FromJson<TEntity>(response);
+        return JsonConvert.DeserializeObject<TEntity>(response); 
     }
 
     public async Task<HttpResponseMessage> SendRequestAsync(string uri, HttpMethod httpMethod, string authorization = null, HttpContent httpContent = null)
