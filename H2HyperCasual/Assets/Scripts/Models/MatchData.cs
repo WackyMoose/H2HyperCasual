@@ -34,6 +34,6 @@ public class MatchData : MonoBehaviour
 
     public bool SetMatchWinner()
     {
-
+        return true;
     }
 }
