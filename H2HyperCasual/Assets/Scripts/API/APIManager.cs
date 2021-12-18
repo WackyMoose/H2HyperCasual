@@ -27,6 +27,7 @@ public class APIManager : MonoBehaviour
 {
     public static APIManager Instance;
 
+    private PlayerManager _playerManager;
     private HttpRequest _httpRequest;
 
     private void Awake()
@@ -41,6 +42,7 @@ public class APIManager : MonoBehaviour
         }
 
         _httpRequest = new HttpRequest();
+        _playerManager = PlayerManager.Instance;
     }
 
     public async Task Login(string playerName, string password)
@@ -52,7 +54,7 @@ public class APIManager : MonoBehaviour
         };
 
         var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
-        Debug.Log(loginResponse.accessToken);
+        _playerManager.PopulatePlayerData(loginResponse.accessToken, loginResponse.player);
     }
 
     public async Task Register(string playerName, string password)

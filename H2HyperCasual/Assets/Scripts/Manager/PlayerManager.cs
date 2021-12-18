@@ -2,20 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public struct PlayerData
-{
-    public string AccessToken;
-    public int Id;
-    public string Name;
-    public int Kills;
-    public int Deaths;
-}
-
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager Instance;
 
-    [SerializeField] private PlayerData _playerData;
+    [SerializeField] private PlayerDataSO playerData;
 
     private void Awake()
     {
@@ -27,5 +18,11 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+
+    public void PopulatePlayerData(string accessToken, Player player)
+    {
+        playerData.accessToken = accessToken;
+        playerData.player = player;
     }
 }
