@@ -21,6 +21,7 @@ namespace TankGame.Utils
 
         public void Awake()
         {
+            _NetworkManager = FindObjectOfType<NetworkManager>();
             InitializePool();
         }
 

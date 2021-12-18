@@ -13,12 +13,19 @@ public struct PlayerData
 
 public class PlayerManager : MonoBehaviour
 {
-    public static PlayerManager instance;
+    public static PlayerManager Instance;
 
     [SerializeField] private PlayerData _playerData;
 
     private void Awake()
     {
-        instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        if (Instance != this)
+        {
+            Destroy(this);
+        }
     }
 }

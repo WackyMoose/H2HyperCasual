@@ -25,13 +25,21 @@ public class RegisterResponse
 
 public class APIManager : MonoBehaviour
 {
-    public static APIManager _instance;
+    public static APIManager Instance;
 
     private HttpRequest _httpRequest;
 
     private void Awake()
     {
-        _instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        if (Instance != this)
+        {
+            Destroy(this);
+        }
+
         _httpRequest = new HttpRequest();
     }
 
