@@ -17,11 +17,11 @@ public class LoginPanel : MonoBehaviour
 
     private async void Login()
     {
-        await APIManager.Instance.Login(playerNameInput.text, passwordInput.text);
+        await APIManager.Instance.LoginAsync(playerNameInput.text, passwordInput.text);
     }
 
     private async void Register()
     {
-        await APIManager.Instance.Register(playerNameInput.text, passwordInput.text);
+        await APIManager.Instance.RegisterAsync(playerNameInput.text, passwordInput.text);
     }
 }
