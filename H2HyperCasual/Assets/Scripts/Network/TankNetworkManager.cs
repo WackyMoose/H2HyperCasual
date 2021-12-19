@@ -1,12 +1,12 @@
 using System;
-using Unity.Netcode;
-using Unity.Netcode.Transports.UNET;
-using UnityEngine;
-using TMPro;
 using System.Text;
 using System.Collections.Generic;
 using TankGame.Utils;
+using TankGame.Models;
 using UnityEngine.UI;
+using UnityEngine;
+using Unity.Netcode;
+using Unity.Netcode.Transports.UNET;
 
 namespace TankGame.Managers
 {
@@ -29,6 +29,7 @@ namespace TankGame.Managers
         private static Dictionary<ulong, PlayerData> clientData;
 
         [SerializeField] private int kills;
+        [SerializeField] private MatchData _matchData = new MatchData();
 
         private void Start()
         {
@@ -110,6 +111,8 @@ namespace TankGame.Managers
             NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
             NetworkManager.Singleton.StartHost();
             ChangeGameState(GameState.Ongoing);
+
+
         }
 
         public void Client() 
