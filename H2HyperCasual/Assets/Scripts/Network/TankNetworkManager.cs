@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using TankGame.Utils;
@@ -25,11 +26,11 @@ namespace TankGame.Managers
 
         private UNetTransport _transport;
         private PlayerSpawner _playerSpawner;
+        private PlayerManager _playerManager;
 
         private static Dictionary<ulong, PlayerData> clientData;
 
-        [SerializeField] private int kills;
-        [SerializeField] private MatchData _matchData = new MatchData();
+        private MatchData _matchData = new MatchData();
 
         private void Start()
         {
@@ -84,6 +85,10 @@ namespace TankGame.Managers
             {
                 _lobbyUI.SetActive(false);
                 _leaveUI.SetActive(true);
+
+                var player = _playerManager.GetPlayerData().player;
+
+                AddPlayerToMatchServerRpc(player);
             }
         }
 
@@ -111,8 +116,6 @@ namespace TankGame.Managers
             NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
             NetworkManager.Singleton.StartHost();
             ChangeGameState(GameState.Ongoing);
-
-
         }
 
         public void Client() 
@@ -162,14 +165,16 @@ namespace TankGame.Managers
         public void UpdateMatchDataServerRpc(ulong killId, ulong dyingId) 
         {
             Debug.Log($"{NetworkManager.Singleton.ConnectedClients[killId].ClientId} killed {NetworkManager.Singleton.ConnectedClients[dyingId].ClientId}");
-            kills++;
 
-            if (kills > 3)
-            {
-                ChangeGameState(GameState.Finished);
-            }
+            _matchData.AddKillToPlayer()
         }
 
+        [ServerRpc]
+        public void AddPlayerToMatchServerRpc(Player playerToAdd) 
+        {
+            _matchData.AddPlayer(playerToAdd);
+        }
+        
         public void ChangeGameState(GameState newState) 
         {
             _gameState = newState;
