@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace TankGame.Models
 {
+    [Serializable]
     public class MatchData
     {
         public int MatchStatus { get; set; }
