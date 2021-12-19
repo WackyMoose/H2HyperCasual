@@ -46,10 +46,10 @@ namespace TankGame.TankUtils {
 
             yield return new WaitForSeconds(time);
 
-            gameObject.SetActive(false);
+            //gameObject.SetActive(false);
 
-            DestroyShellClientRpc();
-            //NetworkObject.Despawn(true);
+            //DestroyShellClientRpc();
+            NetworkObject.Despawn(true);
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

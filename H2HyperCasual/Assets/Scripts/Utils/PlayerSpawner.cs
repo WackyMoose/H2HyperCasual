@@ -5,7 +5,6 @@ using UnityEngine;
 
 namespace TankGame.Utils
 {
-    [RequireComponent(typeof(NetworkManager))]
     public class PlayerSpawner : MonoBehaviour
     {
         NetworkManager _NetworkManager;
@@ -28,7 +27,7 @@ namespace TankGame.Utils
 
         private void Awake()
         {
-            _NetworkManager = gameObject.GetComponent<NetworkManager>();
+            _NetworkManager = FindObjectOfType<NetworkManager>();
             _NetworkManager.ConnectionApprovalCallback += ConnectionApprovalWithRandomSpawnPos;
         }
 

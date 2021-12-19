@@ -2,10 +2,11 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using TMPro;
+using TankGame.TankController;
 
 namespace TankGame.Managers
 {
-    public class TankNetworkManager : MonoBehaviour
+    public class TankNetworkManager : NetworkBehaviour
     {
         private UNetTransport _transport;
 
@@ -19,11 +20,22 @@ namespace TankGame.Managers
             NetworkManager.Singleton.OnServerStarted += Singleton_OnServerStarted;
             NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
             NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnectCallback;
+
+            _ipInputField.onValueChanged.AddListener(delegate { SetupIpAndPort(); });
+            //_portInputField.onValueChanged.AddListener(delegate { SetupIpAndPort(); });
         }
 
-        private void Singleton_OnServerStarted()
+        private void SetupIpAndPort() 
         {
-            
+            _transport.ConnectAddress = _ipInputField.text;
+            //_transport.ConnectPort = int.Parse(_portInputField.text);
+        }
+
+        private void Singleton_OnServerStarted() 
+        {
+            if (NetworkManager.Singleton.IsServer == false)
+                return;
+            Debug.Log($"Server started!");
         }
 
         private void Singleton_OnClientDisconnectCallback(ulong obj)
@@ -34,16 +46,11 @@ namespace TankGame.Managers
 
         private void Singleton_OnClientConnectedCallback(ulong obj)
         {
-            if (obj == NetworkManager.Singleton.LocalClientId)
+            if (NetworkManager.Singleton.IsServer == false)
                 return;
 
+            NetworkManager.Singleton.ConnectedClients[obj].PlayerObject.GetComponent<Tank>().SetPlayerName($"HansHenrik: {NetworkManager.Singleton.ConnectedClients.Count}");
             Debug.LogError($"{obj} connected, making the player count {NetworkManager.Singleton.ConnectedClients.Count}");
-        }
-
-        private void Update()
-        {
-            _transport.ConnectAddress =  _ipInputField.text;
-            _transport.ConnectPort = int.Parse(_portInputField.text);
         }
 
         void OnGUI()

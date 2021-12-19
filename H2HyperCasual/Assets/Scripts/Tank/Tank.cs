@@ -1,7 +1,9 @@
+using TMPro;
 using UnityEngine;
 using Unity.Netcode;
 using TankGame.TankUtils;
 using TankGame.Utils;
+using Unity.Collections;
 
 namespace TankGame.TankController {
     public class Tank : NetworkBehaviour
@@ -30,10 +32,15 @@ namespace TankGame.TankController {
         [SerializeField] private NetworkVariable<float> _networkTurretAngle = new NetworkVariable<float>();
         [SerializeField] private NetworkVariable<int> _networkHitPoints = new NetworkVariable<int>(100);
         [SerializeField] private NetworkVariable<float> _networkHitPointsScale = new NetworkVariable<float>(1);
+        [SerializeField] private NetworkVariable<FixedString64Bytes> _networkPlayerName = new NetworkVariable<FixedString64Bytes>();
 
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private GameObject _shellPrefab;
         [SerializeField] private GameObject _trackMarkPrefab;
+
+        [SerializeField] private PlayerSpawner _playerSpawner;
+        [SerializeField] private TextMeshProUGUI _playerNameTextObj;
+        
 
         private float _currShootTime;
 
@@ -44,17 +51,18 @@ namespace TankGame.TankController {
         #endregion
 
         #region Updates and all that jazz
-        private void Awake()
-        {
-            _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
-            _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
-        }
 
         public override void OnNetworkSpawn()
         {
             base.OnNetworkSpawn();
 
-            transform.position = NetworkManager.GetComponent<PlayerSpawner>().GetNextSpawnPosition();
+            _networkPlayerName.OnValueChanged += SetName;
+            _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
+            _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
+
+            _playerSpawner = FindObjectOfType<PlayerSpawner>();
+
+            transform.position = _playerSpawner.GetNextSpawnPosition();
 
             _graphics.SetActive(true);
         }
@@ -140,6 +148,10 @@ namespace TankGame.TankController {
         {
             _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
         }
+        private void SetName(FixedString64Bytes previousValue, FixedString64Bytes newValue)
+        {
+            _playerNameTextObj.text = newValue.ToString();
+        }
         #endregion
 
         #region RPC
@@ -190,6 +202,12 @@ namespace TankGame.TankController {
             track.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
         }
 
+        //[ServerRpc]
+        public void SetPlayerName(string playerName) 
+        {
+            _networkPlayerName.Value = playerName;
+        }
+
         [ClientRpc]
         public void UpdateHpBarClientRpc(float newScale, ClientRpcParams clientRpcParams) 
         {
@@ -208,7 +226,6 @@ namespace TankGame.TankController {
             _networkHitPoints.Value = _networkHitPoints.Value - damage;
 
             _networkHitPointsScale.Value = (float)_networkHitPoints.Value / 100;
-            //Debug.LogError(_networkHitPointsScale.Value);
 
             ClientRpcParams clientRpcParams = new ClientRpcParams
             {
@@ -230,7 +247,7 @@ namespace TankGame.TankController {
 
                 _networkHitPoints.Value = 100;
 
-                transform.position = NetworkManager.GetComponent<PlayerSpawner>().GetNextSpawnPosition();
+                transform.position = _playerSpawner.GetNextSpawnPosition();
 
                 _rigidBody2D.velocity = Vector2.zero;
                 _rigidBody2D.angularVelocity = 0;

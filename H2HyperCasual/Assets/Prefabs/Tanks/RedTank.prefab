@@ -304,10 +304,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _tankDriveSpeed: 15
   _maxTankDriveSpeed: 50
-  _tankRotateSpeed: 5
+  _tankRotateSpeed: 3
   _turretRotateSpeed: 5
   _rateOfFire: 60
-  _shellVelocity: 10
+  _shellVelocity: 5.45
   _shellLifeTime: 10
   _distanceBetweenTracks: 0.35
   _trackMarksLifeTime: 3
@@ -316,6 +316,8 @@ MonoBehaviour:
   _tankBodyTransform: {fileID: 4414128387161136909}
   _turretTransform: {fileID: 4414128388546748595}
   _networkObjectPool: {fileID: 0}
+  _hpBar: {fileID: 0}
+  _hpBarWhite: {fileID: 0}
   _networkHorizontalInput:
     m_InternalValue: 0
   _networkVerticalInput:
@@ -324,9 +326,82 @@ MonoBehaviour:
     m_InternalValue: 0
   _networkHitPoints:
     m_InternalValue: 100
+  _networkHitPointsScale:
+    m_InternalValue: 1
+  _networkPlayerName:
+    m_InternalValue:
+      utf8LengthInBytes: 0
+      bytes:
+        offset0000:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0016:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        offset0032:
+          byte0000: 0
+          byte0001: 0
+          byte0002: 0
+          byte0003: 0
+          byte0004: 0
+          byte0005: 0
+          byte0006: 0
+          byte0007: 0
+          byte0008: 0
+          byte0009: 0
+          byte0010: 0
+          byte0011: 0
+          byte0012: 0
+          byte0013: 0
+          byte0014: 0
+          byte0015: 0
+        byte0048: 0
+        byte0049: 0
+        byte0050: 0
+        byte0051: 0
+        byte0052: 0
+        byte0053: 0
+        byte0054: 0
+        byte0055: 0
+        byte0056: 0
+        byte0057: 0
+        byte0058: 0
+        byte0059: 0
+        byte0060: 0
+        byte0061: 0
   _shootingPoint: {fileID: 4414128387937535723}
   _shellPrefab: {fileID: 6763404093521873695, guid: 11c1b6daaa5af8d478f878c888e5adb5, type: 3}
   _trackMarkPrefab: {fileID: 2198408997795992882, guid: cb499d89aa7d8b147b3791db01f79160, type: 3}
+  _playerSpawner: {fileID: 0}
+  _playerNameTextObj: {fileID: 0}
 --- !u!114 &8890086921454362426
 MonoBehaviour:
   m_ObjectHideFlags: 0
