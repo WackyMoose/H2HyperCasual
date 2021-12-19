@@ -22871,6 +22871,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 85404718}
     - target: {fileID: 660466776520060637, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
+      propertyPath: _killsToWin
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 660466776520060637, guid: e6a48c4a1ce9a9b40ae75b2adb6c8517, type: 3}
       propertyPath: _leaveButton
       value: 
       objectReference: {fileID: 1116560034}

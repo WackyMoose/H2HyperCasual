@@ -51,7 +51,7 @@ namespace TankGame.Models
 
         public bool AddKillToPlayer(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
+            Player player = Players.FirstOrDefault(p => Players.IndexOf(p) == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
 
             if (player != null)
             {
@@ -67,7 +67,7 @@ namespace TankGame.Models
 
         public bool AddDeathToPlayer(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong,int>(clientId));
+            Player player = Players.FirstOrDefault(p => Players.IndexOf(p) == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
 
             if (player != null)
             {
@@ -83,7 +83,7 @@ namespace TankGame.Models
 
         public bool UpdatePlayerKdr(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
+            Player player = Players.FirstOrDefault(p => Players.IndexOf(p) == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
 
             if (player != null)
             {

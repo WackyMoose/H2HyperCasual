@@ -52,6 +52,8 @@ namespace TankGame.TankController {
         private float _verticalInput;
 
         private Vector2 _lastPosition = Vector2.zero;
+
+        private bool _isPlaying;
         #endregion
 
         #region Updates and all that jazz
@@ -64,6 +66,8 @@ namespace TankGame.TankController {
                 _redTurret.SetActive(false);
                 _localGraphics.SetActive(true);
                 _localTurret.SetActive(true);
+
+                _isPlaying = true;
             }
 
             _playerSpawner = FindObjectOfType<PlayerSpawner>();
@@ -79,6 +83,26 @@ namespace TankGame.TankController {
         private void GameStateChanged(GameState obj)
         {
             Debug.Log($"GameState changed to {obj} on {OwnerClientId}");
+
+            switch (obj)
+            {
+                case GameState.Lobby:
+                    break;
+                case GameState.Ongoing:
+                    _rigidBody2D.velocity = Vector2.zero;
+                    _rigidBody2D.angularVelocity = 0;
+                    _isPlaying = true;
+                    break;
+                case GameState.Finished:
+                    _isPlaying = false;
+                    _rigidBody2D.velocity = Vector2.zero;
+                    _rigidBody2D.angularVelocity = 0;
+                    break;
+                case GameState.Stopped:
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void OnEnable()
@@ -93,6 +117,9 @@ namespace TankGame.TankController {
 
         private void Update()
         {
+            if (_isPlaying == false)
+                return;
+
             if (IsOwner && IsClient)
             {
                 HandleInput();

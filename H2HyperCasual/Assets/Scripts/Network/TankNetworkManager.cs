@@ -16,6 +16,7 @@ namespace TankGame.Managers
     public class TankNetworkManager : NetworkManager
     {
         public event Action<GameState> OnGameStateChanged;
+        public event Action<string> OnMatchEnded;
 
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _clientButton;
@@ -24,11 +25,16 @@ namespace TankGame.Managers
         [SerializeField] private GameObject _lobbyUI;
         [SerializeField] private GameObject _leaveUI;
 
+        [SerializeField] private GameObject _finishedGameUI;
+
+        [SerializeField] private int _killsToWin = 10;
+
         private GameState _gameState = GameState.Lobby;
 
         private UNetTransport _transport;
         private PlayerSpawner _playerSpawner;
         private PlayerManager _playerManager;
+        private APIManager _apiManager;
 
         private MatchData _matchData = new MatchData();
 
@@ -36,6 +42,7 @@ namespace TankGame.Managers
         {
             _playerSpawner = FindObjectOfType<PlayerSpawner>();
             _playerManager = FindObjectOfType<PlayerManager>();
+            _apiManager = FindObjectOfType<APIManager>();
 
             _hostButton.onClick.AddListener(Host);
             _clientButton.onClick.AddListener(Client);
@@ -81,6 +88,7 @@ namespace TankGame.Managers
             {
                 _lobbyUI.SetActive(false);
                 _leaveUI.SetActive(true);
+                ChangeGameState(_gameState);
             }
         }
 
@@ -89,11 +97,9 @@ namespace TankGame.Managers
             var player = _playerManager.GetPlayerData().player;
             byte[] playerData = PlayerObjectToByteArray(player);
 
-            // Set password ready to send to the server to validate
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.NetworkConfig.ConnectionData = playerData;
             NetworkManager.Singleton.StartHost();
-            ChangeGameState(GameState.Ongoing);
         }
 
         public void Client() 
@@ -101,7 +107,6 @@ namespace TankGame.Managers
             var player = _playerManager.GetPlayerData().player;
             byte[] playerData = PlayerObjectToByteArray(player);
 
-            // Set password ready to send to the server to validate
             NetworkManager.Singleton.NetworkConfig.ConnectionData = playerData;
             NetworkManager.Singleton.StartClient();
         }
@@ -136,9 +141,45 @@ namespace TankGame.Managers
         }
 
         [ServerRpc]
-        public void UpdateMatchDataServerRpc(ulong killId, ulong dyingId) 
+        public void UpdateMatchDataServerRpc(ulong killId, ulong dyingId)
         {
             Debug.Log($"{NetworkManager.Singleton.ConnectedClients[killId].ClientId} killed {NetworkManager.Singleton.ConnectedClients[dyingId].ClientId}");
+
+            if (_matchData.AddKillToPlayer(killId))
+            {
+                Debug.Log($"Updated kills on {killId}");
+            }
+            else
+            {
+                Debug.Log($"We cant update kills on {killId}");
+            }
+
+            if (_matchData.AddDeathToPlayer(dyingId))
+            {
+                Debug.Log($"Updated deaths on {dyingId}");
+            }
+            else
+            {
+                Debug.Log($"We cant update deaths on {dyingId}");
+            }
+
+            var killingPlayer = _matchData.Players[_matchData.ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(killId)];
+
+            if (killingPlayer.kills >= _killsToWin)
+            {
+
+                if (_matchData.SetMatchWinner())
+                {
+                    Debug.Log($"{killingPlayer.playerName} wins the match!!");
+                    ChangeGameState(GameState.Finished);
+                    _apiManager
+
+                }
+                else
+                {
+                    Debug.Log("We cant find a winner!");
+                }
+            }
         }
 
         [ServerRpc]
@@ -174,6 +215,15 @@ namespace TankGame.Managers
             Player obj = (Player)binForm.Deserialize(memStream);
 
             return obj;
+        }
+
+        public void StartMatch() 
+        {
+            ChangeGameState(GameState.Ongoing);
+        }
+        public void EndMatch() 
+        {
+            
         }
 
         //TODO Use the playername from player model to populate all tank text name component...
