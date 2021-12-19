@@ -99,7 +99,7 @@ namespace TankGame.Models
 
         public bool SetPlayTime()
         {
-            PlayTime = StartPlayTime.Second - DateTime.Now.Second;
+            PlayTime = DateTime.Now.Second - StartPlayTime.Second;
 
             return true;
         }
