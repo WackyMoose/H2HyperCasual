@@ -172,6 +172,9 @@ namespace TankGame.Managers
             _gameState = newState;
             OnGameStateChanged?.Invoke(_gameState);
         }
+
+
+        //TODO Use the playername from player model to populate all tank text name component...
     }
 
     public enum GameState
