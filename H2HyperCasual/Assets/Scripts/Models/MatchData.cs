@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MatchData : MonoBehaviour
@@ -21,7 +22,7 @@ public class MatchData : MonoBehaviour
         return false;
     }
 
-    public bool AddMatchKill(MatchKill matchKill)
+    public bool AddKillToMatchKill(MatchKill matchKill)
     {
         if (!MatchKills.Contains(matchKill))
         {
@@ -32,8 +33,58 @@ public class MatchData : MonoBehaviour
         return false;
     }
 
+    public bool AddKillToPlayer(Player player)
+    {
+        if (!Players.Contains(player))
+        {
+            player.kills++;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool AddDeathToPlayer(Player player)
+    {
+        if (!Players.Contains(player))
+        {
+            player.deaths++;
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool UpdatePlayerKdr(Player player)
+    {
+        if (!Players.Contains(player))
+        {
+            player.kdr = (player.deaths != 0 ? player.kills / player.deaths : 0.0);
+            return true;
+        }
+
+        return false;
+    }
+
     public bool SetMatchWinner()
     {
+        int maxKills = Players.Select(p => p.kills).Max();
+        double maxKdr = Players.Select(p => p.kdr).Max();
+
+        List<Player> PlayersSortedByKills = Players.OrderByDescending(p => p.kills).ToList();
+        List<Player> PlayersSortedByKdr = Players.OrderByDescending(p => p.kdr).ToList();
+
+        Player winner = PlayersSortedByKills.Intersect(PlayersSortedByKdr).First();
+
+        WinnerPlayerId = winner.id;
+
+        return true;
+    }
+
+    public bool SetPlayTime()
+    {
+        
+
         return true;
     }
 }

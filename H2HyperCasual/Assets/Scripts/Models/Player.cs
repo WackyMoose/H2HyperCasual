@@ -6,4 +6,5 @@ public class Player
     public string playerName;
     public int kills;
     public int deaths;
+    public double kdr;
 }
