@@ -4,6 +4,7 @@ using Unity.Netcode;
 using TankGame.TankUtils;
 using TankGame.Utils;
 using Unity.Collections;
+using TankGame.Managers;
 
 namespace TankGame.TankController {
     public class Tank : NetworkBehaviour
@@ -43,6 +44,7 @@ namespace TankGame.TankController {
         [SerializeField] private GameObject _trackMarkPrefab;
 
         [SerializeField] private PlayerSpawner _playerSpawner;
+        [SerializeField] private TankNetworkManager _tankNetworkManager;
         
         private float _currShootTime;
 
@@ -67,8 +69,16 @@ namespace TankGame.TankController {
             _playerSpawner = FindObjectOfType<PlayerSpawner>();
             _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
             _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
+            _tankNetworkManager = FindObjectOfType<TankNetworkManager>();
+
+            _tankNetworkManager.OnGameStateChanged += GameStateChanged;
 
             _graphics.SetActive(true);
+        }
+
+        private void GameStateChanged(GameState obj)
+        {
+            Debug.Log($"GameState changed to {obj} on {OwnerClientId}");
         }
 
         private void OnEnable()
@@ -221,11 +231,14 @@ namespace TankGame.TankController {
 
             if (_networkHitPoints.Value <= 0)
             {
+                _tankNetworkManager.UpdateMatchDataServerRpc(damagingTank.OwnerClientId, OwnerClientId);
+
                 _networkHitPoints.Value = 0;
 
                 //TODO Blow up, or something like that
 
                 _networkHitPoints.Value = 100;
+                _networkHitPointsScale.Value = 1;
 
                 transform.position = _playerSpawner.GetNextSpawnPosition();
 

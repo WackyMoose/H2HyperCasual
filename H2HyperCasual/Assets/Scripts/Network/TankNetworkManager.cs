@@ -1,3 +1,4 @@
+using System;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
@@ -11,6 +12,8 @@ namespace TankGame.Managers
 {
     public class TankNetworkManager : NetworkManager
     {
+        public event Action<GameState> OnGameStateChanged;
+
         [SerializeField] private Button _hostButton;
         [SerializeField] private Button _clientButton;
         [SerializeField] private Button _leaveButton;
@@ -18,10 +21,14 @@ namespace TankGame.Managers
         [SerializeField] private GameObject _lobbyUI;
         [SerializeField] private GameObject _leaveUI;
 
+        private GameState _gameState = GameState.Lobby;
+
         private UNetTransport _transport;
         private PlayerSpawner _playerSpawner;
 
         private static Dictionary<ulong, PlayerData> clientData;
+
+        [SerializeField] private int kills;
 
         private void Start()
         {
@@ -102,6 +109,7 @@ namespace TankGame.Managers
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
             NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
             NetworkManager.Singleton.StartHost();
+            ChangeGameState(GameState.Ongoing);
         }
 
         public void Client() 
@@ -146,5 +154,31 @@ namespace TankGame.Managers
 
             callback(true, null, approveConnection, spawnPos, spawnRot);
         }
+
+        [ServerRpc]
+        public void UpdateMatchDataServerRpc(ulong killId, ulong dyingId) 
+        {
+            Debug.Log($"{NetworkManager.Singleton.ConnectedClients[killId].ClientId} killed {NetworkManager.Singleton.ConnectedClients[dyingId].ClientId}");
+            kills++;
+
+            if (kills > 3)
+            {
+                ChangeGameState(GameState.Finished);
+            }
+        }
+
+        public void ChangeGameState(GameState newState) 
+        {
+            _gameState = newState;
+            OnGameStateChanged?.Invoke(_gameState);
+        }
+    }
+
+    public enum GameState
+    {
+        Lobby,
+        Ongoing,
+        Finished,
+        Stopped,
     }
 }
