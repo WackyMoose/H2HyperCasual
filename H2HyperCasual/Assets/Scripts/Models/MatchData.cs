@@ -80,4 +80,11 @@ public class MatchData : MonoBehaviour
 
         return true;
     }
+
+    public bool SetPlayTime()
+    {
+        
+
+        return true;
+    }
 }
