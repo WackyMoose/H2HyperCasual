@@ -11,7 +11,7 @@ namespace TankGame.Models
     {
         public int MatchStatus { get; set; }
         public int WinnerPlayerId { get; set; }
-        public int StartPlayTime { get; set; }
+        public DateTime StartPlayTime { get; set; }
         public int PlayTime { get; set; }
         public List<Player> Players { get; set; }
         public List<MatchKill> MatchKills { get; set; }
@@ -19,7 +19,7 @@ namespace TankGame.Models
 
         public MatchData()
         {
-            StartPlayTime = DateTime.Now.Second;
+            StartPlayTime = DateTime.Now;
 
             Players = new List<Player>();
             MatchKills = new List<MatchKill>();
@@ -112,7 +112,7 @@ namespace TankGame.Models
 
         public bool SetPlayTime()
         {
-            PlayTime = DateTime.Now.Second - StartPlayTime;
+            PlayTime = (int)(DateTime.Now - StartPlayTime).TotalSeconds;
 
             return true;
         }
