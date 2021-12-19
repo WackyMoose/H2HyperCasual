@@ -15,7 +15,7 @@ namespace TankGame.Models
         public int PlayTime { get; set; }
         public List<Player> Players { get; set; }
         public List<MatchKill> MatchKills { get; set; }
-        public Dictionary<ulong, int> ClientIdToPlayerId { get; set; }
+        public Dictionary<ulong, int> ClientIdToPlayerIndex { get; set; }
 
         public MatchData()
         {
@@ -23,14 +23,15 @@ namespace TankGame.Models
 
             Players = new List<Player>();
             MatchKills = new List<MatchKill>();
-            ClientIdToPlayerId = new Dictionary<ulong, int>();
+            ClientIdToPlayerIndex = new Dictionary<ulong, int>();
         }
 
-        public bool AddPlayer(Player player)
+        public bool AddPlayer(ulong clientId,Player player)
         {
             if (!Players.Contains(player))
             {
                 Players.Add(player);
+                ClientIdToPlayerIndex.Add(clientId, Players.IndexOf(player));
                 return true;
             }
 
@@ -48,15 +49,15 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddKillToPlayer(int playerId)
+        public bool AddKillToPlayer(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == playerId);
-            
+            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
+
             if (player != null)
             {
                 player.kills++;
 
-                UpdatePlayerKdr(playerId);
+                UpdatePlayerKdr(clientId);
 
                 return true;
             }
@@ -64,15 +65,15 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddDeathToPlayer(int playerId)
+        public bool AddDeathToPlayer(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == playerId);
+            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong,int>(clientId));
 
             if (player != null)
             {
                 player.deaths++;
 
-                UpdatePlayerKdr(playerId);
+                UpdatePlayerKdr(clientId);
 
                 return true;
             }
@@ -80,9 +81,9 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool UpdatePlayerKdr(int playerId)
+        public bool UpdatePlayerKdr(ulong clientId)
         {
-            Player player = Players.FirstOrDefault(p => p.id == playerId);
+            Player player = Players.FirstOrDefault(p => p.id == ClientIdToPlayerIndex.GetValueOrDefault<ulong, int>(clientId));
 
             if (player != null)
             {

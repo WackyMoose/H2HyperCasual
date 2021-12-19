@@ -18,3 +18,4 @@ MonoBehaviour:
     playerName: 
     kills: 0
     deaths: 0
+    kdr: 0

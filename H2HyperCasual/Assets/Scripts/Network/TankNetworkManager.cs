@@ -8,6 +8,8 @@ using UnityEngine.UI;
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace TankGame.Managers
 {
@@ -28,13 +30,12 @@ namespace TankGame.Managers
         private PlayerSpawner _playerSpawner;
         private PlayerManager _playerManager;
 
-        private static Dictionary<ulong, PlayerData> clientData;
-
         private MatchData _matchData = new MatchData();
 
         private void Start()
         {
             _playerSpawner = FindObjectOfType<PlayerSpawner>();
+            _playerManager = FindObjectOfType<PlayerManager>();
 
             _hostButton.onClick.AddListener(Host);
             _clientButton.onClick.AddListener(Client);
@@ -67,11 +68,6 @@ namespace TankGame.Managers
 
         private void HandleClientDisconnected(ulong clientId)
         {
-            if (NetworkManager.Singleton.IsServer == true)
-            {
-                clientData.Remove(clientId);
-            }
-
             if (clientId == NetworkManager.Singleton.LocalClientId)
             {
                 _leaveUI.SetActive(false);
@@ -85,47 +81,28 @@ namespace TankGame.Managers
             {
                 _lobbyUI.SetActive(false);
                 _leaveUI.SetActive(true);
-
-                var player = _playerManager.GetPlayerData().player;
-
-                AddPlayerToMatchServerRpc(player);
             }
-        }
-
-        public static PlayerData? GetPlayer(ulong clientId) 
-        {
-            if (clientData.TryGetValue(clientId, out PlayerData player))
-            {
-                return player;
-            }
-
-            return null;
         }
 
         public void Host() 
         {
-            clientData = new Dictionary<ulong, PlayerData>();
-            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData("Hans");
-            
-            var payload = JsonUtility.ToJson(new ConnectionPayload() { playerName = clientData[NetworkManager.Singleton.LocalClientId].PlayerName });
-
-            byte[] payloadBytes = Encoding.ASCII.GetBytes(payload);
+            var player = _playerManager.GetPlayerData().player;
+            byte[] playerData = PlayerObjectToByteArray(player);
 
             // Set password ready to send to the server to validate
             NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = playerData;
             NetworkManager.Singleton.StartHost();
             ChangeGameState(GameState.Ongoing);
         }
 
         public void Client() 
         {
-            var payload = JsonUtility.ToJson(new ConnectionPayload() { playerName = "Henzi" });
-
-            byte[] payloadBytes = Encoding.ASCII.GetBytes(payload);
+            var player = _playerManager.GetPlayerData().player;
+            byte[] playerData = PlayerObjectToByteArray(player);
 
             // Set password ready to send to the server to validate
-            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = playerData;
             NetworkManager.Singleton.StartClient();
         }
 
@@ -144,19 +121,16 @@ namespace TankGame.Managers
 
         private void ApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
         {
-            string payload = Encoding.ASCII.GetString(connectionData);
-            var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
+            var playerData = ByteArrayToPlayerObject(connectionData);
+
+            _matchData.AddPlayer(clientId, playerData);
 
             bool approveConnection = true;
 
             Vector3 spawnPos = Vector3.zero;
             Quaternion spawnRot = Quaternion.identity;
 
-            if (approveConnection == true)
-            {
-                spawnPos = _playerSpawner.GetNextSpawnPosition();
-                clientData[clientId] = new PlayerData(connectionPayload.playerName);
-            }
+            spawnPos = _playerSpawner.GetNextSpawnPosition();
 
             callback(true, null, approveConnection, spawnPos, spawnRot);
         }
@@ -165,14 +139,12 @@ namespace TankGame.Managers
         public void UpdateMatchDataServerRpc(ulong killId, ulong dyingId) 
         {
             Debug.Log($"{NetworkManager.Singleton.ConnectedClients[killId].ClientId} killed {NetworkManager.Singleton.ConnectedClients[dyingId].ClientId}");
-
-            _matchData.AddKillToPlayer()
         }
 
         [ServerRpc]
-        public void AddPlayerToMatchServerRpc(Player playerToAdd) 
+        public void AddPlayerToMatchServerRpc(ulong clientId,Player playerToAdd) 
         {
-            _matchData.AddPlayer(playerToAdd);
+            _matchData.AddPlayer(clientId,playerToAdd);
         }
         
         public void ChangeGameState(GameState newState) 
@@ -181,6 +153,28 @@ namespace TankGame.Managers
             OnGameStateChanged?.Invoke(_gameState);
         }
 
+        byte[] PlayerObjectToByteArray(object obj)
+        {
+            if (obj == null)
+                return null;
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+
+        private Player ByteArrayToPlayerObject(byte[] arrBytes)
+        {
+            MemoryStream memStream = new MemoryStream();
+            BinaryFormatter binForm = new BinaryFormatter();
+            memStream.Write(arrBytes, 0, arrBytes.Length);
+            memStream.Seek(0, SeekOrigin.Begin);
+            Player obj = (Player)binForm.Deserialize(memStream);
+
+            return obj;
+        }
 
         //TODO Use the playername from player model to populate all tank text name component...
     }

@@ -40,28 +40,6 @@ public class TankPlayerName : NetworkBehaviour
         this._displayName.Value = name;
     }
 
-    IEnumerator SpawnWait() 
-    {
-        yield return new WaitForSeconds(1);
-
-        if (IsServer == true)
-        {
-            PlayerData? player = TankNetworkManager.GetPlayer(OwnerClientId);
-
-            if (player.HasValue)
-            {
-                Debug.Log($"We have a name {player.Value.PlayerName}");
-                _displayName.Value = player.Value.PlayerName;
-            }
-
-            _nameTest = "ServerFart";
-        }
-        //else if (IsOwner == true && IsClient == true)
-        //{
-        //    UpdatePlayerNameServerRpc(_nameTest, OwnerClientId);
-        //}
-    }
-
     //private void OnEnable()
     //{
     //    _displayName.OnValueChanged += HandleDisplayNameChanged;
