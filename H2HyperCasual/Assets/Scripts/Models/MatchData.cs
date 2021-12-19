@@ -9,7 +9,8 @@ namespace TankGame.Models
     [Serializable]
     public class MatchData
     {
-        public int MatchStatus { get; set; }
+        public int MatchId { get; set; }
+        public int MatchStatusId { get; set; }
         public int WinnerPlayerId { get; set; }
         public DateTime StartPlayTime { get; set; }
         public int PlayTime { get; set; }
