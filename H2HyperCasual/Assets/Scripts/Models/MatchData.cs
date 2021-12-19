@@ -11,14 +11,15 @@ namespace TankGame.Models
     {
         public int MatchStatus { get; set; }
         public int WinnerPlayerId { get; set; }
-        public DateTime StartPlayTime { get; set; }
+        public int StartPlayTime { get; set; }
         public int PlayTime { get; set; }
         public List<Player> Players { get; set; }
         public List<MatchKill> MatchKills { get; set; }
+        public Dictionary<ulong, int> ClientIdIdPlayerId { get; set; }
 
         public MatchData()
         {
-            StartPlayTime = DateTime.Now;
+            StartPlayTime = DateTime.Now.Second;
 
             Players = new List<Player>();
             MatchKills = new List<MatchKill>();
@@ -35,7 +36,7 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddKillToMatchKill(MatchKill matchKill)
+        public bool AddMatchKill(MatchKill matchKill)
         {
             if (!MatchKills.Contains(matchKill))
             {
@@ -46,12 +47,15 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddKillToPlayer(Player player)
+        public bool AddKillToPlayer(int playerId)
         {
-            if (!Players.Contains(player))
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
+            
+            if (player != null)
             {
                 player.kills++;
-                UpdatePlayerKdr(player);
+
+                UpdatePlayerKdr(playerId);
 
                 return true;
             }
@@ -59,12 +63,15 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddDeathToPlayer(Player player)
+        public bool AddDeathToPlayer(int playerId)
         {
-            if (!Players.Contains(player))
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
+
+            if (player != null)
             {
                 player.deaths++;
-                UpdatePlayerKdr(player);
+
+                UpdatePlayerKdr(playerId);
 
                 return true;
             }
@@ -72,11 +79,14 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool UpdatePlayerKdr(Player player)
+        public bool UpdatePlayerKdr(int playerId)
         {
-            if (!Players.Contains(player))
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
+
+            if (player != null)
             {
                 player.kdr = (player.deaths != 0 ? player.kills / player.deaths : 0.0);
+
                 return true;
             }
 
@@ -89,7 +99,7 @@ namespace TankGame.Models
             double maxKdr = Players.Select(p => p.kdr).Max();
 
             List<Player> PlayersSortedByKills = Players.OrderByDescending(p => p.kills).ToList();
-            List<Player> PlayersSortedByKdr = Players.OrderByDescending(p => p.kdr).ToList();
+            List<Player> PlayersSortedByKdr = PlayersSortedByKills.OrderByDescending(p => p.kdr).ToList();
 
             Player winner = PlayersSortedByKills.Intersect(PlayersSortedByKdr).First();
 
@@ -100,7 +110,7 @@ namespace TankGame.Models
 
         public bool SetPlayTime()
         {
-            PlayTime = DateTime.Now.Second - StartPlayTime.Second;
+            PlayTime = DateTime.Now.Second - StartPlayTime;
 
             return true;
         }
