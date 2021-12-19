@@ -66,8 +66,6 @@ namespace TankGame.TankController {
                 _redTurret.SetActive(false);
                 _localGraphics.SetActive(true);
                 _localTurret.SetActive(true);
-
-                _isPlaying = true;
             }
 
             _playerSpawner = FindObjectOfType<PlayerSpawner>();
@@ -78,6 +76,8 @@ namespace TankGame.TankController {
             _tankNetworkManager.OnGameStateChanged += GameStateChanged;
 
             _graphics.SetActive(true);
+
+            _isPlaying = true;
         }
 
         private void GameStateChanged(GameState obj)

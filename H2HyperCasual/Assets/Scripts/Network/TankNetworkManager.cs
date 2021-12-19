@@ -172,7 +172,7 @@ namespace TankGame.Managers
                 {
                     Debug.Log($"{killingPlayer.playerName} wins the match!!");
                     ChangeGameState(GameState.Finished);
-                    _apiManager
+                    _apiManager.PostMathcDataAsync(_matchData);
 
                 }
                 else

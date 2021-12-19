@@ -87,7 +87,7 @@ public class APIManager : MonoBehaviour
     {
         var accessToken = _playerManager.GetPlayerData().accessToken;
 
-        var match = await _httpRequest.PostAsync<Match>("https://api.victorkrogh.dk/api/Match/create-match");
+        var match = await _httpRequest.PostAsync<Match>("https://api.victorkrogh.dk/api/Match/create-match", null,accessToken);
 
         match.Data.winnerPlayerId = matchData.WinnerPlayerId;
         match.Data.matchStatusId = matchData.MatchStatusId;

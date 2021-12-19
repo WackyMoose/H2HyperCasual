@@ -66,7 +66,7 @@ public class HttpRequest
     where TEntity : class
     {
         var bodyContent = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
-        var httpResponse = await SendRequestAsync(url, HttpMethod.Patch, accesToken, httpContent: bodyContent);
+        var httpResponse = await SendRequestAsync(url, HttpMethod.Put, accesToken, httpContent: bodyContent);
 
         var response = await httpResponse.Content.ReadAsStringAsync();
 
