@@ -20,6 +20,7 @@ public class MenuPanel : MonoBehaviour
         _playerManager = PlayerManager.Instance;
 
         var playerData = _playerManager.GetPlayerData();
+        Debug.Log(playerData.player.playerName);
         greetingsText.text = $"Hi, {playerData.player.playerName}";
 
         startGameButton.onClick.AddListener(ChangeScene);
