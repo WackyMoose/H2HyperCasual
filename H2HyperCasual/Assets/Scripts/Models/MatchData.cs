@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,9 +8,18 @@ public class MatchData : MonoBehaviour
 {
     public int MatchStatus { get; set; }
     public int WinnerPlayerId { get; set; }
+    public DateTime StartPlayTime { get; set; }
     public int PlayTime { get; set; }
     public List<Player> Players { get; set; }
     public List<MatchKill> MatchKills { get; set; }
+
+    public MatchData()
+    {
+        StartPlayTime = DateTime.Now;
+
+        Players = new List<Player>();
+        MatchKills = new List<MatchKill>();
+    }
 
     public bool AddPlayer(Player player)
     {
@@ -83,7 +93,7 @@ public class MatchData : MonoBehaviour
 
     public bool SetPlayTime()
     {
-        
+        PlayTime = StartPlayTime.Second - DateTime.Now.Second;
 
         return true;
     }
