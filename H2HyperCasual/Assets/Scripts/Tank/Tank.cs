@@ -20,6 +20,11 @@ namespace TankGame.TankController {
         [SerializeField] private float _trackMarksLifeTime;
 
         [SerializeField] private GameObject _graphics;
+        [SerializeField] private GameObject _localGraphics;
+        [SerializeField] private GameObject _redGraphics;
+        [SerializeField] private GameObject _localTurret;
+        [SerializeField] private GameObject _redTurret;
+
         [SerializeField] private Rigidbody2D _rigidBody2D;
         [SerializeField] private Transform _tankBodyTransform;
         [SerializeField] private Transform _turretTransform;
@@ -51,9 +56,15 @@ namespace TankGame.TankController {
 
         public override void OnNetworkSpawn()
         {
-            if (IsServer == false)
-                return;
+            if (IsClient == true && IsOwner == true)
+            {
+                _redGraphics.SetActive(false);
+                _redTurret.SetActive(false);
+                _localGraphics.SetActive(true);
+                _localTurret.SetActive(true);
+            }
 
+            _playerSpawner = FindObjectOfType<PlayerSpawner>();
             _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
             _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
 

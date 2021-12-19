@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7753607446073305691
 RectTransform:
   m_ObjectHideFlags: 0
@@ -116,6 +116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _nameText: {fileID: 8122139698937715243}
   _textName: {fileID: 8122139698937715243}
+  _nameTest: 
 --- !u!1 &4414128386953409589
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,7 +217,7 @@ GameObject:
   - component: {fileID: 8750228700695995139}
   - component: {fileID: 7943521586682701133}
   m_Layer: 0
-  m_Name: BlueTank
+  m_Name: Tank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -327,6 +328,10 @@ MonoBehaviour:
   _distanceBetweenTracks: 0.35
   _trackMarksLifeTime: 3
   _graphics: {fileID: 4414128387161136908}
+  _localGraphics: {fileID: 4414128387922504691}
+  _redGraphics: {fileID: 4414128387984636018}
+  _localTurret: {fileID: 4414128387660641715}
+  _redTurret: {fileID: 4414128388205970200}
   _rigidBody2D: {fileID: 4414128387095912567}
   _tankBodyTransform: {fileID: 4414128387161136909}
   _turretTransform: {fileID: 4414128388546748595}
@@ -411,7 +416,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4414128387161136909}
-  - component: {fileID: 5768926030118700868}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -440,45 +444,6 @@ Transform:
   m_Father: {fileID: 4414128387095912561}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5768926030118700868
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4414128387161136908}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ShadowGroup: 0
-  m_ComponentVersion: 1
-  m_HasRenderer: 0
-  m_UseRendererSilhouette: 1
-  m_CastsShadows: 1
-  m_SelfShadows: 1
-  m_ApplyToSortingLayers: 000000009d37368bcd79d926b5627f166ba3119445b7fb9b
-  m_ShapePath:
-  - {x: -0.57903004, y: -0.5197579, z: 0}
-  - {x: -0.6529105, y: -0.42780074, z: 0}
-  - {x: -0.6479765, y: 0.5057422, z: 0}
-  - {x: -0.54939413, y: 0.5889085, z: 0}
-  - {x: -0.4405235, y: 0.66380364, z: 0}
-  - {x: 0.4288074, y: 0.6588694, z: 0}
-  - {x: 0.5572316, y: 0.59465826, z: 0}
-  - {x: 0.6531207, y: 0.5098797, z: 0}
-  - {x: 0.64614725, y: -0.4277929, z: 0}
-  - {x: 0.564212, y: -0.5197571, z: 0}
-  - {x: 0.45351207, y: -0.52658165, z: 0}
-  - {x: 0.4386944, y: -0.6006724, z: 0}
-  - {x: 0.3053314, y: -0.6550064, z: 0}
-  - {x: -0.31703052, y: -0.65007067, z: 0}
-  - {x: -0.44545478, y: -0.5957383, z: 0}
-  - {x: -0.48003075, y: -0.53152657, z: 0}
-  m_ShapePathHash: 180005502
-  m_Mesh: {fileID: 0}
-  m_InstanceId: 141722
 --- !u!1 &4414128387382738101
 GameObject:
   m_ObjectHideFlags: 0
@@ -663,7 +628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4414128387660641712
 Transform:
   m_ObjectHideFlags: 0
@@ -747,7 +712,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4414128387922504688
 Transform:
   m_ObjectHideFlags: 0
@@ -863,7 +828,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4414128387984636019
 Transform:
   m_ObjectHideFlags: 0
@@ -1115,7 +1080,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4414128388205970201
 Transform:
   m_ObjectHideFlags: 0

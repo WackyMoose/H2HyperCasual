@@ -12,11 +12,32 @@ public class TankPlayerName : NetworkBehaviour
 
     [SerializeField] private string _nameTest;
 
-    private NetworkVariable<FixedString32Bytes> _displayName = new NetworkVariable<FixedString32Bytes>();
+    private NetworkVariable<FixedString32Bytes> _displayName = new NetworkVariable<FixedString32Bytes>(new FixedString32Bytes(""));
 
-    public override void OnNetworkSpawn()
+    private void Awake()
     {
-        StartCoroutine(SpawnWait());
+        _displayName.OnValueChanged += HandleDisplayNameChanged;
+    }
+
+    private void Start()
+    {
+        if (IsOwner == true)
+        {
+            SetPlayerNameServerRpc("Henzi");
+        }
+    }
+
+    //public override void OnNetworkSpawn()
+    //{
+    //    Debug.Log("We spawned some tanks");
+
+    //    StartCoroutine(SpawnWait());
+    //}
+
+    [Unity.Netcode.ServerRpc(RequireOwnership = true)]
+    private void SetPlayerNameServerRpc(string name)
+    {
+        this._displayName.Value = name;
     }
 
     IEnumerator SpawnWait() 
@@ -35,43 +56,43 @@ public class TankPlayerName : NetworkBehaviour
 
             _nameTest = "ServerFart";
         }
-        else if (IsOwner == true && IsClient == true)
-        {
-            UpdatePlayerNameServerRpc(_nameTest, OwnerClientId);
-        }
+        //else if (IsOwner == true && IsClient == true)
+        //{
+        //    UpdatePlayerNameServerRpc(_nameTest, OwnerClientId);
+        //}
     }
 
-    private void OnEnable()
-    {
-        _displayName.OnValueChanged += HandleDisplayNameChanged;
-    }
+    //private void OnEnable()
+    //{
+    //    _displayName.OnValueChanged += HandleDisplayNameChanged;
+    //}
 
-    private void OnDisable()
-    {
-        _displayName.OnValueChanged -= HandleDisplayNameChanged;
-    }
+    //private void OnDisable()
+    //{
+    //    _displayName.OnValueChanged -= HandleDisplayNameChanged;
+    //}
 
     private void HandleDisplayNameChanged(FixedString32Bytes previousValue, FixedString32Bytes newValue)
     {
         Debug.Log(previousValue + " " + newValue);
 
-        _textName.text = _displayName.Value.ToString();
+        _textName.text = newValue.Value;
     }
 
-    public void UpdateName() 
-    {
-        _textName.text = _displayName.Value.ToString();
-    }
+    //public void UpdateName() 
+    //{
+    //    _textName.text = _displayName.Value.ToString();
+    //}
 
-    [ServerRpc]
-    private void UpdatePlayerNameServerRpc(string playerName, ulong clientId) 
-    {
-        foreach (var player in NetworkManager.Singleton.ConnectedClients)
-        {
-            foreach (var obj in player.Value.OwnedObjects)
-            {
-                Debug.Log($"{clientId} owns: {obj.name}");
-            }
-        }
-    }
+    //[ServerRpc]
+    //private void UpdatePlayerNameServerRpc(string playerName, ulong clientId) 
+    //{
+    //    foreach (var player in NetworkManager.Singleton.ConnectedClients)
+    //    {
+    //        foreach (var obj in player.Value.OwnedObjects)
+    //        {
+    //            Debug.Log($"{clientId} owns: {obj.name}");
+    //        }
+    //    }
+    //}
 }
