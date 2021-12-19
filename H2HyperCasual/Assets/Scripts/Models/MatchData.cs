@@ -15,6 +15,7 @@ namespace TankGame.Models
         public int PlayTime { get; set; }
         public List<Player> Players { get; set; }
         public List<MatchKill> MatchKills { get; set; }
+        public Dictionary<ulong, int> ClientIdIdPlayerId { get; set; }
 
         public MatchData()
         {
@@ -35,7 +36,7 @@ namespace TankGame.Models
             return false;
         }
 
-        public bool AddKillToMatchKill(MatchKill matchKill)
+        public bool AddMatchKill(MatchKill matchKill)
         {
             if (!MatchKills.Contains(matchKill))
             {
@@ -48,7 +49,7 @@ namespace TankGame.Models
 
         public bool AddKillToPlayer(int playerId)
         {
-            Player player = Players.First(p => p.id == playerId);
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
             
             if (player != null)
             {
@@ -64,7 +65,7 @@ namespace TankGame.Models
 
         public bool AddDeathToPlayer(int playerId)
         {
-            Player player = Players.First(p => p.id == playerId);
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
 
             if (player != null)
             {
@@ -80,7 +81,7 @@ namespace TankGame.Models
 
         public bool UpdatePlayerKdr(int playerId)
         {
-            Player player = Players.First(p => p.id == playerId);
+            Player player = Players.FirstOrDefault(p => p.id == playerId);
 
             if (player != null)
             {
@@ -98,7 +99,7 @@ namespace TankGame.Models
             double maxKdr = Players.Select(p => p.kdr).Max();
 
             List<Player> PlayersSortedByKills = Players.OrderByDescending(p => p.kills).ToList();
-            List<Player> PlayersSortedByKdr = Players.OrderByDescending(p => p.kdr).ToList();
+            List<Player> PlayersSortedByKdr = PlayersSortedByKills.OrderByDescending(p => p.kdr).ToList();
 
             Player winner = PlayersSortedByKills.Intersect(PlayersSortedByKdr).First();
 
