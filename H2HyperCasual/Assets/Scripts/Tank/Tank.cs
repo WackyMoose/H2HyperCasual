@@ -32,16 +32,13 @@ namespace TankGame.TankController {
         [SerializeField] private NetworkVariable<float> _networkTurretAngle = new NetworkVariable<float>();
         [SerializeField] private NetworkVariable<int> _networkHitPoints = new NetworkVariable<int>(100);
         [SerializeField] private NetworkVariable<float> _networkHitPointsScale = new NetworkVariable<float>(1);
-        [SerializeField] private NetworkVariable<FixedString64Bytes> _networkPlayerName = new NetworkVariable<FixedString64Bytes>();
 
         [SerializeField] private Transform _shootingPoint;
         [SerializeField] private GameObject _shellPrefab;
         [SerializeField] private GameObject _trackMarkPrefab;
 
         [SerializeField] private PlayerSpawner _playerSpawner;
-        [SerializeField] private TextMeshProUGUI _playerNameTextObj;
         
-
         private float _currShootTime;
 
         private float _horizontalInput;
@@ -54,17 +51,23 @@ namespace TankGame.TankController {
 
         public override void OnNetworkSpawn()
         {
-            base.OnNetworkSpawn();
+            if (IsServer == false)
+                return;
 
-            _networkPlayerName.OnValueChanged += SetName;
             _networkObjectPool = FindObjectOfType<NetworkObjectPool>();
             _hpBar = GameObject.FindGameObjectWithTag("HpBar").GetComponent<RectTransform>();
 
-            _playerSpawner = FindObjectOfType<PlayerSpawner>();
-
-            transform.position = _playerSpawner.GetNextSpawnPosition();
-
             _graphics.SetActive(true);
+        }
+
+        private void OnEnable()
+        {
+            _networkHitPointsScale.OnValueChanged += UpdateHpBar;
+        }
+
+        private void OnDisable()
+        {
+            _networkHitPointsScale.OnValueChanged -= UpdateHpBar;
         }
 
         private void Update()
@@ -73,17 +76,9 @@ namespace TankGame.TankController {
             {
                 HandleInput();
                 CreateTrackMarks();
-
-                //Debug.Log($"{OwnerClientId} is on tick: {NetworkManager.Singleton.LocalTime.Tick}");
-                //Debug.Log($"Time diff from server is: {NetworkManager.Singleton.LocalTime.TimeTicksAgo(NetworkManager.ServerTime.Tick).TimeAsFloat}");
-                //Debug.Log($"Time diff from client is: {NetworkManager.Singleton.LocalTime.TimeTicksAgo(NetworkManager.Singleton.LocalTime.Tick).TimeAsFloat}");
             }
 
-            //Debug.Log($"Servertick: {NetworkManager.ServerTime.Tick}");
-
             RotateTurret();
-
-            //NetworkManager.Singleton.world
         }
 
         private void FixedUpdate()
@@ -144,13 +139,12 @@ namespace TankGame.TankController {
                 CreateTrackMarksServerRpc();
             }
         }
-        private void UpdateHpBar() 
+        private void UpdateHpBar(float oldValue, float newValue) 
         {
-            _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
-        }
-        private void SetName(FixedString64Bytes previousValue, FixedString64Bytes newValue)
-        {
-            _playerNameTextObj.text = newValue.ToString();
+            if (IsOwner && IsClient)
+            {
+                _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
+            }
         }
         #endregion
 
@@ -202,40 +196,15 @@ namespace TankGame.TankController {
             track.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId);
         }
 
-        //[ServerRpc]
-        public void SetPlayerName(string playerName) 
-        {
-            _networkPlayerName.Value = playerName;
-        }
-
-        [ClientRpc]
-        public void UpdateHpBarClientRpc(float newScale, ClientRpcParams clientRpcParams) 
-        {
-            Debug.LogWarning($"We are updating the HpBar on {OwnerClientId}");
-            _hpBar.localScale = new Vector3(_networkHitPointsScale.Value, 1, 1);
-            if (IsOwner)
-                return;
-
-        }
         #endregion
 
         #region Public Methods
         public void TakeDamage(int damage, Tank damagingTank) 
         {
-            Debug.LogError($"{damagingTank.name} dealth {damage} to us!");
+            //Debug.Log($"{damagingTank.name} dealth {damage} to us!");
             _networkHitPoints.Value = _networkHitPoints.Value - damage;
 
             _networkHitPointsScale.Value = (float)_networkHitPoints.Value / 100;
-
-            ClientRpcParams clientRpcParams = new ClientRpcParams
-            {
-                Send = new ClientRpcSendParams
-                {
-                    TargetClientIds = new ulong[] { OwnerClientId }
-                }
-            };
-
-            UpdateHpBarClientRpc(_networkHitPointsScale.Value, clientRpcParams);
 
             //TODO Generate smoke when are low on HP...
 

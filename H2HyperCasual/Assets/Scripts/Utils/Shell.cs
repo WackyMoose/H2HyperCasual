@@ -46,9 +46,6 @@ namespace TankGame.TankUtils {
 
             yield return new WaitForSeconds(time);
 
-            //gameObject.SetActive(false);
-
-            //DestroyShellClientRpc();
             NetworkObject.Despawn(true);
         }
 
@@ -61,49 +58,21 @@ namespace TankGame.TankUtils {
                 return;
             }
 
-            //var delay = NetworkManager.ConnectedClients[_ownerID].PlayerObject.NetworkManager.LocalTime.Tick - NetworkManager.ServerTime.Tick;
-            //Debug.Log($"Delay: {delay}");
-
-            //Debug.Log($"{NetworkManager.Singleton.ServerTime.Tick}");
-
             if (collisionObject.CompareTag("Obstacle"))
             {
                 StartCoroutine(DestroyBulletAfterLifeTime(0));
-                //DestroyShellClientRpc(NetworkManager.Singleton.ServerTime.TimeAsFloat);
 
             }
 
             if (collisionObject.TryGetComponent<Tank>(out var tank))
             {
-                Debug.LogError("We hit someone");
+                Debug.Log("We hit someone");
                 if (tank != _ownerTank)
                 {
                     tank.TakeDamage(_shellDamage,_ownerTank);
                     StartCoroutine(DestroyBulletAfterLifeTime(0));
-                    //DestroyShellClientRpc(NetworkManager.Singleton.ServerTime.TimeAsFloat);
                 }
             }
         }
-
-        [ClientRpc]
-        public void DestroyShellClientRpc()
-        {
-            //Debug.Log($"{NetworkObject.NetworkManager.LocalTime.Tick}");
-
-            //DestroyBulletServerRpc();
-
-            gameObject.SetActive(false);
-        }
-
-        //[ServerRpc]
-        //private void DestroyBulletServerRpc()
-        //{
-        //    if (!NetworkObject.IsSpawned)
-        //    {
-        //        return;
-        //    }
-
-        //    NetworkObject.Despawn(true);
-        //}
     }
 }

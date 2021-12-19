@@ -2,91 +2,149 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 using UnityEngine;
 using TMPro;
-using TankGame.TankController;
+using System.Text;
+using System.Collections.Generic;
+using TankGame.Utils;
+using UnityEngine.UI;
 
 namespace TankGame.Managers
 {
-    public class TankNetworkManager : NetworkBehaviour
+    public class TankNetworkManager : NetworkManager
     {
-        private UNetTransport _transport;
+        [SerializeField] private Button _hostButton;
+        [SerializeField] private Button _clientButton;
+        [SerializeField] private Button _leaveButton;
 
-        [SerializeField] private TMP_InputField _ipInputField;
-        [SerializeField] private TMP_InputField _portInputField;
+        [SerializeField] private GameObject _lobbyUI;
+        [SerializeField] private GameObject _leaveUI;
+
+        private UNetTransport _transport;
+        private PlayerSpawner _playerSpawner;
+
+        private static Dictionary<ulong, PlayerData> clientData;
 
         private void Start()
         {
-            _transport = GetComponent<UNetTransport>();
+            _playerSpawner = FindObjectOfType<PlayerSpawner>();
 
-            NetworkManager.Singleton.OnServerStarted += Singleton_OnServerStarted;
-            NetworkManager.Singleton.OnClientConnectedCallback += Singleton_OnClientConnectedCallback;
-            NetworkManager.Singleton.OnClientDisconnectCallback += Singleton_OnClientDisconnectCallback;
+            _hostButton.onClick.AddListener(Host);
+            _clientButton.onClick.AddListener(Client);
+            _leaveButton.onClick.AddListener(Leave);
 
-            _ipInputField.onValueChanged.AddListener(delegate { SetupIpAndPort(); });
-            //_portInputField.onValueChanged.AddListener(delegate { SetupIpAndPort(); });
+            _leaveUI.SetActive(false);
+
+            NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
+            NetworkManager.Singleton.OnClientConnectedCallback += HandleClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnected;
         }
 
-        private void SetupIpAndPort() 
+        private void OnDestroy()
         {
-            _transport.ConnectAddress = _ipInputField.text;
-            //_transport.ConnectPort = int.Parse(_portInputField.text);
+            if (NetworkManager.Singleton == null) { return; }
+
+            NetworkManager.Singleton.OnServerStarted -= HandleServerStarted;
+            NetworkManager.Singleton.OnClientConnectedCallback -= HandleClientConnected;
+            NetworkManager.Singleton.OnClientDisconnectCallback -= HandleClientDisconnected;
         }
 
-        private void Singleton_OnServerStarted() 
+        private void HandleServerStarted() 
         {
-            if (NetworkManager.Singleton.IsServer == false)
-                return;
-            Debug.Log($"Server started!");
-        }
-
-        private void Singleton_OnClientDisconnectCallback(ulong obj)
-        {
-            if (obj == NetworkManager.Singleton.LocalClientId)
-                return;
-        }
-
-        private void Singleton_OnClientConnectedCallback(ulong obj)
-        {
-            if (NetworkManager.Singleton.IsServer == false)
-                return;
-
-            NetworkManager.Singleton.ConnectedClients[obj].PlayerObject.GetComponent<Tank>().SetPlayerName($"HansHenrik: {NetworkManager.Singleton.ConnectedClients.Count}");
-            Debug.LogError($"{obj} connected, making the player count {NetworkManager.Singleton.ConnectedClients.Count}");
-        }
-
-        void OnGUI()
-        {
-            GUILayout.BeginArea(new Rect(10, 10, 300, 300));
-            if (!NetworkManager.Singleton.IsClient && !NetworkManager.Singleton.IsServer)
+            // Temporary workaround to treat host as client
+            if (NetworkManager.Singleton.IsHost)
             {
-                StartButtons();
+                HandleClientConnected(NetworkManager.Singleton.ServerClientId);
             }
-            else
+        }
+
+        private void HandleClientDisconnected(ulong clientId)
+        {
+            if (NetworkManager.Singleton.IsServer == true)
             {
-                StatusLabels();
+                clientData.Remove(clientId);
             }
 
-            if (NetworkManager.Singleton.IsServer)
+            if (clientId == NetworkManager.Singleton.LocalClientId)
             {
-                GUILayout.Label($"IP: {_transport.ConnectAddress} on port: {_transport.ConnectPort}");
+                _leaveUI.SetActive(false);
+                _lobbyUI.SetActive(true);
+            }
+        }
+
+        private void HandleClientConnected(ulong clientId)
+        {
+            if (clientId == NetworkManager.Singleton.LocalClientId)
+            {
+                _lobbyUI.SetActive(false);
+                _leaveUI.SetActive(true);
+            }
+        }
+
+        public static PlayerData? GetPlayer(ulong clientId) 
+        {
+            if (clientData.TryGetValue(clientId, out PlayerData player))
+            {
+                return player;
             }
 
-            GUILayout.EndArea();
+            return null;
         }
 
-        static void StartButtons()
+        public void Host() 
         {
-            if (GUILayout.Button("Host")) NetworkManager.Singleton.StartHost();
-            if (GUILayout.Button("Client")) NetworkManager.Singleton.StartClient();
-        }
-
-        static void StatusLabels()
-        {
-            var mode = NetworkManager.Singleton.IsHost ?
-                "Host" : NetworkManager.Singleton.IsServer ? "Server" : "Client";
+            clientData = new Dictionary<ulong, PlayerData>();
+            clientData[NetworkManager.Singleton.LocalClientId] = new PlayerData("Hans");
             
-            GUILayout.Label("Transport: " +
-                NetworkManager.Singleton.NetworkConfig.NetworkTransport.GetType().Name);
-            GUILayout.Label("Mode: " + mode);
+            var payload = JsonUtility.ToJson(new ConnectionPayload() { playerName = clientData[NetworkManager.Singleton.LocalClientId].PlayerName });
+
+            byte[] payloadBytes = Encoding.ASCII.GetBytes(payload);
+
+            // Set password ready to send to the server to validate
+            NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
+            NetworkManager.Singleton.StartHost();
+        }
+
+        public void Client() 
+        {
+            var payload = JsonUtility.ToJson(new ConnectionPayload() { playerName = "Henzi" });
+
+            byte[] payloadBytes = Encoding.ASCII.GetBytes(payload);
+
+            // Set password ready to send to the server to validate
+            NetworkManager.Singleton.NetworkConfig.ConnectionData = payloadBytes;
+            NetworkManager.Singleton.StartClient();
+        }
+
+        public void Leave() 
+        {
+            NetworkManager.Singleton.Shutdown();
+
+            if (NetworkManager.Singleton.IsServer == true)
+            {
+                NetworkManager.Singleton.ConnectionApprovalCallback -= ApprovalCheck;
+            }
+
+            _leaveUI.SetActive(false);
+            _lobbyUI.SetActive(true);
+        }
+
+        private void ApprovalCheck(byte[] connectionData, ulong clientId, NetworkManager.ConnectionApprovedDelegate callback)
+        {
+            string payload = Encoding.ASCII.GetString(connectionData);
+            var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
+
+            bool approveConnection = true;
+
+            Vector3 spawnPos = Vector3.zero;
+            Quaternion spawnRot = Quaternion.identity;
+
+            if (approveConnection == true)
+            {
+                spawnPos = _playerSpawner.GetNextSpawnPosition();
+                clientData[clientId] = new PlayerData(connectionPayload.playerName);
+            }
+
+            callback(true, null, approveConnection, spawnPos, spawnRot);
         }
     }
 }

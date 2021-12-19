@@ -17,7 +17,7 @@ MonoBehaviour:
   m_RendererFeatures: []
   m_RendererFeatureMap: 
   m_UseNativeRenderPass: 0
-  m_TransparencySortMode: 0
+  m_TransparencySortMode: 2
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}
   m_HDREmulationScale: 1
   m_LightRenderTextureScale: 0.5
@@ -39,7 +39,7 @@ MonoBehaviour:
   m_CameraSortingLayersTextureBound: -1
   m_CameraSortingLayerDownsamplingMethod: 0
   m_MaxLightRenderTextureCount: 16
-  m_MaxShadowRenderTextureCount: 1
+  m_MaxShadowRenderTextureCount: 64
   m_ShapeLightShader: {fileID: 4800000, guid: d79e1c784eaf80c4585c0be7391f757a, type: 3}
   m_ShapeLightVolumeShader: {fileID: 4800000, guid: 7e60080c8cd24a2468cb08b4bfee5606, type: 3}
   m_PointLightShader: {fileID: 4800000, guid: e35a31e1679aeff489e202f5cc4853d5, type: 3}
