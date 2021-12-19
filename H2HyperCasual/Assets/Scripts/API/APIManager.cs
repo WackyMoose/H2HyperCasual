@@ -45,12 +45,15 @@ public class APIManager : MonoBehaviour
         {
             Destroy(this);
         }
-
         _httpRequest = new HttpRequest();
+    }
+
+    private void Start()
+    {
         _playerManager = PlayerManager.Instance;
     }
 
-    public async Task LoginAsync(string playerName, string password)
+    public async Task<APIResponseWrapper<LoginResponse>> LoginAsync(string playerName, string password)
     {
         var loginRequest = new AuthRequest
         {
@@ -58,11 +61,10 @@ public class APIManager : MonoBehaviour
             password = password
         };
 
-        var loginResponse = await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
-        _playerManager.PopulatePlayerData(loginResponse.accessToken, loginResponse.player);
+        return await _httpRequest.PostAsync<LoginResponse>("https://api.victorkrogh.dk/api/Auth/login", loginRequest);
     }
 
-    public async Task RegisterAsync(string playerName, string password)
+    public async Task<APIResponseWrapper<RegisterResponse>> RegisterAsync(string playerName, string password)
     {
         var registerRequest = new AuthRequest
         {
@@ -70,14 +72,13 @@ public class APIManager : MonoBehaviour
             password = password
         };
 
-        var registerResponse = await _httpRequest.PostAsync<RegisterResponse>("https://api.victorkrogh.dk/api/Auth/register", registerRequest);
-        Debug.Log(registerResponse.player.playerName);
+        return await _httpRequest.PostAsync<RegisterResponse>("https://api.victorkrogh.dk/api/Auth/register", registerRequest);
     }
 
     public async Task<IEnumerable<LeaderboardPlayer>> GetLeaderboardAsync(int top = 10)
     {
         // https://api.victorkrogh.dk/api/Leaderboard/get-leaderboard?top=10
         var leaderboardPlayers = await _httpRequest.GetAsync<IEnumerable<LeaderboardPlayer>>($"https://api.victorkrogh.dk/api/Leaderboard/get-leaderboard?top={top}");
-        return leaderboardPlayers;
+        return leaderboardPlayers.Data;
     }
 }
