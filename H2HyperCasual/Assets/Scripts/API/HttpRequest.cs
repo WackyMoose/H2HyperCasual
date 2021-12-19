@@ -42,11 +42,31 @@ public class HttpRequest
         }
     }
 
-    public async Task<APIResponseWrapper<TEntity>> PostAsync<TEntity>(string url, object body = null, string errorMessage = null)
+    public async Task<APIResponseWrapper<TEntity>> PostAsync<TEntity>(string url, object body = null, string accesToken = null)
         where TEntity : class
     {
         var bodyContent = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
-        var httpResponse = await SendRequestAsync(url, HttpMethod.Post, httpContent: bodyContent);
+        var httpResponse = await SendRequestAsync(url, HttpMethod.Post, accesToken, httpContent: bodyContent);
+
+        var response = await httpResponse.Content.ReadAsStringAsync();
+
+        try
+        {
+            var data = JsonConvert.DeserializeObject<TEntity>(response);
+            return APIResponseWrapper<TEntity>.Success(data);
+        }
+        catch (Exception)
+        {
+            var errorMessageFromAPI = JsonConvert.DeserializeObject<string>(response);
+            return APIResponseWrapper<TEntity>.Error(errorMessageFromAPI);
+        }
+    }
+
+    public async Task<APIResponseWrapper<TEntity>> PatchAsync<TEntity>(string url, object body = null, string accesToken = null)
+    where TEntity : class
+    {
+        var bodyContent = new StringContent(JsonConvert.SerializeObject(body), Encoding.UTF8);
+        var httpResponse = await SendRequestAsync(url, HttpMethod.Patch, accesToken, httpContent: bodyContent);
 
         var response = await httpResponse.Content.ReadAsStringAsync();
 

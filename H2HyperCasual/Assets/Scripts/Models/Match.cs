@@ -4,6 +4,6 @@ public class Match
 {
     public int id;
     public int winnerPlayerId;
-    public int matchStatus;
+    public int matchStatusId;
     public int playTime;
 }
