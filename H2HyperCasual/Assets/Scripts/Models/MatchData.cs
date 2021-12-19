@@ -71,7 +71,10 @@ public class MatchData : MonoBehaviour
         int maxKills = Players.Select(p => p.kills).Max();
         double maxKdr = Players.Select(p => p.kdr).Max();
 
-        Player winner = Players.Find(p => p.kills == maxKills && p.kdr == maxKdr);
+        List<Player> PlayersSortedByKills = Players.OrderByDescending(p => p.kills).ToList();
+        List<Player> PlayersSortedByKdr = Players.OrderByDescending(p => p.kdr).ToList();
+
+        Player winner = PlayersSortedByKills.Intersect(PlayersSortedByKdr).First();
 
         WinnerPlayerId = winner.id;
 
