@@ -15,7 +15,7 @@ namespace TankGame.Models
         public int PlayTime { get; set; }
         public List<Player> Players { get; set; }
         public List<MatchKill> MatchKills { get; set; }
-        public Dictionary<ulong, int> ClientIdIdPlayerId { get; set; }
+        public Dictionary<ulong, int> ClientIdToPlayerId { get; set; }
 
         public MatchData()
         {
@@ -23,6 +23,7 @@ namespace TankGame.Models
 
             Players = new List<Player>();
             MatchKills = new List<MatchKill>();
+            ClientIdToPlayerId = new Dictionary<ulong, int>();
         }
 
         public bool AddPlayer(Player player)
