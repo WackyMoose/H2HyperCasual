@@ -87,17 +87,17 @@ public class APIManager : MonoBehaviour
     {
         var accessToken = _playerManager.GetPlayerData().accessToken;
 
-        var match = await _httpRequest.PostAsync<Match>("https://api.victorkrogh.dk/api/Match/create-match", null,accessToken);
+        var match = await _httpRequest.PostAsync<Match>("https://api.victorkrogh.dk/api/Match/create-match", null, accessToken);
 
         match.Data.winnerPlayerId = matchData.WinnerPlayerId;
         match.Data.matchStatusId = matchData.MatchStatusId;
         match.Data.playTime = matchData.PlayTime;
 
         // Match table
-        _ = await _httpRequest.PatchAsync<Match>($"https://api.victorkrogh.dk/api/Match/update-match?id={match.Data.id}", match.Data, accessToken);
+        //_ = await _httpRequest.PatchAsync<Match>($"https://api.victorkrogh.dk/api/Match/update-match?id={match.Data.id}", match.Data, accessToken);
 
         // MatchKills table
-        _ = await _httpRequest.PostAsync<Match>($"https://api.victorkrogh.dk/api/Match/add-kill-log?id={match.Data.id}", matchData.MatchKills, accessToken);
+        //_ = await _httpRequest.PostAsync<Match>($"https://api.victorkrogh.dk/api/Match/add-kill-log?id={match.Data.id}", matchData.MatchKills, accessToken);
 
         // Players table
         //foreach(Player p in matchData.Players)
